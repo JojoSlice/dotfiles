@@ -69,5 +69,8 @@ alias ls='ls --color'
 alias c='clear'
 
 # Shell integrations
+export PATH="$HOME/.fzf/bin:$PATH"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
