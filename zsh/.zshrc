@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-
+# Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 # Download Zinit, if it's not there yet
@@ -27,6 +27,7 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
+# Add in snippets
 zinit snippet OMZP::command-not-found
 
 # Load completions
@@ -34,16 +35,18 @@ autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Keybindings
+bindkey -e
+bindkey '^j' history-search-backward
+bindkey '^k' history-search-forward
 
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+# History
 HISTSIZE=5000
+HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
-unsetopt beep
 HISTDUP=erase
 setopt appendhistory
 setopt sharehistory
@@ -53,16 +56,6 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-bindkey '^Y' autosuggest-accept
-bindkey '^j' history-search-backward
-bindkey '^k' history-serach-forward
-bindkey '^w' kill-region
-bindkey -v
-bindkey '^c' vi-cmd-mode
-
-
-
-
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -70,14 +63,11 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
-
-zstyle :compinstall filename '/home/jojo/.zshrc'
-
-alias winhome='cd /mnt/c/Users/Johan/'
+# Aliases
+alias winhome='/mnt/c/Users/Johan/'
+alias ls='ls --color'
 alias c='clear'
-alias ls="ls --color"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+# Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
