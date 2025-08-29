@@ -39,7 +39,7 @@ zinit cdreplay -q
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Keybindings
-bindkey -e
+bindkey -v
 bindkey '^j' history-search-backward
 bindkey '^k' history-search-forward
 
@@ -64,8 +64,8 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias wezconf='/mnt/c/Users/Johan/.config/wezterm/wezterm.lua'
-alias winhome='/mnt/c/Users/Johan/'
+alias wezconf='cd /mnt/c/Users/Johan/.config/wezterm/wezterm.lua'
+alias winhome='cd /mnt/c/Users/Johan/'
 alias ls='ls --color'
 alias c='clear'
 
