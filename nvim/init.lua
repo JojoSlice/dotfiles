@@ -221,15 +221,17 @@ require("lazy").setup({
 		"rest-nvim/rest.nvim",
 		ft = "http",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {
-			result_split_horizontal = false,
-			skip_ssl_verification = false,
-			encode_url = true,
-			highlight = {
-				enabled = true,
-				timeout = 150,
-			},
-		},
+		config = function()
+			require("rest-nvim").setup({
+				result_split_horizontal = false,
+				skip_ssl_verification = false,
+				encode_url = true,
+				highlight = {
+					enabled = true,
+					timeout = 150,
+				},
+			})
+		end,
 	},
 
 	-- Terminal
