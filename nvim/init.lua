@@ -231,6 +231,10 @@ require("lazy").setup({
 					timeout = 150,
 				},
 			})
+			-- REST.nvim keymaps
+			vim.keymap.set("n", "<leader>rr", "<Plug>RestNvim", { desc = "Run REST request" })
+			vim.keymap.set("n", "<leader>rp", "<Plug>RestNvimPreview", { desc = "Preview REST request" })
+			vim.keymap.set("n", "<leader>rl", "<Plug>RestNvimLast", { desc = "Run last REST request" })
 		end,
 	},
 
@@ -716,11 +720,6 @@ vim.keymap.set("n", "[c", function()
 	end)
 	return "<Ignore>"
 end, { expr = true, desc = "Previous git hunk" })
-
--- REST.nvim keymaps
-vim.keymap.set("n", "<leader>rr", "<Plug>RestNvim", { desc = "Run REST request" })
-vim.keymap.set("n", "<leader>rp", "<Plug>RestNvimPreview", { desc = "Preview REST request" })
-vim.keymap.set("n", "<leader>rl", "<Plug>RestNvimLast", { desc = "Run last REST request" })
 
 -- Toggleterm keymaps
 vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
