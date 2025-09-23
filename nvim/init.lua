@@ -16,39 +16,13 @@ require("lazy").setup({
 	-- Colorscheme
 	{ "rose-pine/neovim", name = "rose-pine" },
 
-	-- LSP Configuration
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-		},
-	},
-
-	-- Mason för LSP installation
+	-- Mason för LSP installation (keeping for formatters and DAP)
 	{
 		"williamboman/mason.nvim",
 		opts = {},
 	},
 
-	-- Mason LSP config
-	{
-		"williamboman/mason-lspconfig.nvim",
-		opts = {
-			ensure_installed = {
-				"ts_ls", -- Correct name, not deprecated
-				"lua_ls",
-				"html",
-				"cssls",
-				"eslint",
-				"jsonls",
-				"omnisharp",
-			},
-		},
-	},
-
-	-- Mason tool installer för formatters
+	-- Mason tool installer för formatters och debug adapters
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		opts = {
@@ -56,6 +30,16 @@ require("lazy").setup({
 				"stylua",
 				"prettier",
 				"csharpier",
+				"js-debug-adapter",
+				"netcoredbg",
+				-- LSP servers (if you want Mason to manage them)
+				"typescript-language-server",
+				"lua-language-server",
+				"html-lsp",
+				"css-lsp",
+				"eslint-lsp",
+				"json-lsp",
+				"omnisharp",
 			},
 		},
 	},
@@ -315,11 +299,9 @@ vim.cmd("colorscheme rose-pine")
 -- Sätt nvim-notify som standard notification handler
 vim.notify = require("notify")
 
--- LSP Setup
-local lspconfig = require("lspconfig")
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
+-- LSP Setup med nya vim.lsp.config (Neovim 0.11+)
 -- LSP capabilities för completion
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
 -- On_attach funktion för LSP-servrar
@@ -342,16 +324,31 @@ local on_attach = function(client, bufnr)
 	buf_map("i", "<C-h>", vim.lsp.buf.signature_help)
 end
 
--- TypeScript/JavaScript - ts_ls is the correct name
-lspconfig.ts_ls.setup({
-	on_attach = on_attach,
+-- TypeScript/JavaScript med nya vim.lsp.config syntaxen
+vim.lsp.config["ts_ls"] = {
+	cmd = { "typescript-language-server", "--stdio" },
+	filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+	root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
 	capabilities = capabilities,
-})
+	on_attach = on_attach,
+}
 
 -- Lua
-lspconfig.lua_ls.setup({
-	on_attach = on_attach,
+vim.lsp.config["lua_ls"] = {
+	cmd = { "lua-language-server" },
+	filetypes = { "lua" },
+	root_markers = {
+		".luarc.json",
+		".luarc.jsonc",
+		".luacheckrc",
+		".stylua.toml",
+		"stylua.toml",
+		"selene.toml",
+		"selene.yml",
+		".git",
+	},
 	capabilities = capabilities,
+	on_attach = on_attach,
 	settings = {
 		Lua = {
 			runtime = {
@@ -371,56 +368,65 @@ lspconfig.lua_ls.setup({
 			},
 		},
 	},
-})
+}
 
 -- HTML
-lspconfig.html.setup({
-	on_attach = on_attach,
+vim.lsp.config["html"] = {
+	cmd = { "vscode-html-language-server", "--stdio" },
+	filetypes = { "html" },
+	root_markers = { "package.json", ".git" },
 	capabilities = capabilities,
-})
+	on_attach = on_attach,
+}
 
 -- CSS
-lspconfig.cssls.setup({
-	on_attach = on_attach,
+vim.lsp.config["cssls"] = {
+	cmd = { "vscode-css-language-server", "--stdio" },
+	filetypes = { "css", "scss", "less" },
+	root_markers = { "package.json", ".git" },
 	capabilities = capabilities,
-})
+	on_attach = on_attach,
+}
 
 -- JSON
-lspconfig.jsonls.setup({
-	on_attach = on_attach,
+vim.lsp.config["jsonls"] = {
+	cmd = { "vscode-json-language-server", "--stdio" },
+	filetypes = { "json", "jsonc" },
+	root_markers = { "package.json", ".git" },
 	capabilities = capabilities,
-})
+	on_attach = on_attach,
+}
 
--- ESLint - Fixed root_dir to prevent table concat error
-lspconfig.eslint.setup({
-	on_attach = on_attach,
+-- ESLint - Fixed to avoid root_dir table concat error
+vim.lsp.config["eslint"] = {
+	cmd = { "vscode-eslint-language-server", "--stdio" },
+	filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "vue", "svelte" },
+	root_markers = {
+		".eslintrc",
+		".eslintrc.js",
+		".eslintrc.cjs",
+		".eslintrc.yaml",
+		".eslintrc.yml",
+		".eslintrc.json",
+		"eslint.config.js",
+		"eslint.config.mjs",
+		"eslint.config.cjs",
+		"eslint.config.ts",
+		"eslint.config.mts",
+		"eslint.config.cts",
+		"package.json",
+	},
 	capabilities = capabilities,
-	root_dir = function(fname)
-		local root_file = {
-			".eslintrc",
-			".eslintrc.js",
-			".eslintrc.cjs",
-			".eslintrc.yaml",
-			".eslintrc.yml",
-			".eslintrc.json",
-			"eslint.config.js",
-			"eslint.config.mjs",
-			"eslint.config.cjs",
-			"eslint.config.ts",
-			"eslint.config.mts",
-			"eslint.config.cts",
-		}
-		local util = require("lspconfig.util")
-		return util.root_pattern(unpack(root_file))(fname)
-			or util.root_pattern("package.json", "node_modules")(fname)
-			or util.find_git_ancestor(fname)
-	end,
-})
+	on_attach = on_attach,
+}
 
 -- OmniSharp för C#
-lspconfig.omnisharp.setup({
-	on_attach = on_attach,
+vim.lsp.config["omnisharp"] = {
+	cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+	filetypes = { "cs", "vb" },
+	root_markers = { "*.sln", "*.csproj", "omnisharp.json", "function.json", ".git" },
 	capabilities = capabilities,
+	on_attach = on_attach,
 	settings = {
 		FormattingOptions = {
 			EnableEditorConfigSupport = true,
@@ -438,7 +444,7 @@ lspconfig.omnisharp.setup({
 			IncludePrereleases = true,
 		},
 	},
-})
+}
 
 -- Conform för formatting
 local conform_ok, conform = pcall(require, "conform")
