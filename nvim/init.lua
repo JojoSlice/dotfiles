@@ -391,10 +391,30 @@ lspconfig.jsonls.setup({
 	capabilities = capabilities,
 })
 
--- ESLint
+-- ESLint - Fixed root_dir to prevent table concat error
 lspconfig.eslint.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
+	root_dir = function(fname)
+		local root_file = {
+			".eslintrc",
+			".eslintrc.js",
+			".eslintrc.cjs",
+			".eslintrc.yaml",
+			".eslintrc.yml",
+			".eslintrc.json",
+			"eslint.config.js",
+			"eslint.config.mjs",
+			"eslint.config.cjs",
+			"eslint.config.ts",
+			"eslint.config.mts",
+			"eslint.config.cts",
+		}
+		local util = require("lspconfig.util")
+		return util.root_pattern(unpack(root_file))(fname)
+			or util.root_pattern("package.json", "node_modules")(fname)
+			or util.find_git_ancestor(fname)
+	end,
 })
 
 -- OmniSharp för C#
