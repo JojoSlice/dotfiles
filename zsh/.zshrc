@@ -64,7 +64,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias wezconf='cd /mnt/c/Users/Johan/.config/wezterm/wezterm.lua'
+# change winhome alias to point at your windows home dir!
 alias winhome='cd /mnt/c/Users/Johan/'
 alias ls='ls --color'
 alias c='clear'
