@@ -126,10 +126,13 @@ require("lazy").setup({
 									enable = true,
 								},
 							},
-							checkOnSave = {
-								allFeatures = true,
+							-- Korrigerad: checkOnSave är nu en boolean
+							checkOnSave = true,
+							-- Flytta clippy-konfiguration till check
+							check = {
 								command = "clippy",
 								extraArgs = { "--no-deps" },
+								allFeatures = true,
 							},
 							procMacro = {
 								enable = true,
@@ -151,7 +154,6 @@ require("lazy").setup({
 			}
 		end,
 	},
-
 	-- Crates.nvim för Cargo.toml hantering
 	{
 		"saecki/crates.nvim",
