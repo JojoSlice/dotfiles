@@ -28,6 +28,9 @@ require("lazy").setup({
 	-- Mason tool installer för formatters och debug adapters
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = {
+			"williamboman/mason.nvim",
+		},
 		opts = {
 			ensure_installed = {
 				"stylua",
@@ -80,9 +83,8 @@ require("lazy").setup({
 	-- Rustaceanvim för förbättrad Rust-upplevelse
 	{
 		"mrcjkb/rustaceanvim",
-		version = "^5",
-		lazy = false,
-		ft = { "rust" },
+		version = "^6", -- Uppdaterad till version 6
+		lazy = false, -- Removed ft = { "rust" } konflikt
 		config = function()
 			vim.g.rustaceanvim = {
 				server = {
@@ -145,15 +147,44 @@ require("lazy").setup({
 						},
 					},
 				},
+				-- Cross-platform codelldb konfiguration
+				-- OBS: Rustaceanvim kan hitta codelldb automatiskt från Mason.
+				-- Denna config är endast nödvändig om du vill explicit ange sökvägen.
 				dap = {
-					adapter = require("rustaceanvim.config").get_codelldb_adapter(
-						vim.fn.stdpath("data") .. "/mason/bin/codelldb",
-						vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/lldb/lib/liblldb.so"
-					),
+					adapter = function()
+						-- Kontrollera om codelldb finns innan vi försöker använda det
+						local codelldb_exists = vim.fn.executable("codelldb") == 1
+						if not codelldb_exists then
+							vim.notify(
+								"codelldb not found. Install it with :MasonInstall codelldb",
+								vim.log.levels.WARN
+							)
+							return nil
+						end
+
+						-- Använd $MASON env var (rekommenderat i Mason 2.0+)
+						local extension_path = vim.fn.expand("$MASON/packages/codelldb/extension")
+						local codelldb_path = extension_path .. "/adapter/codelldb"
+						local liblldb_path = extension_path .. "/lldb/lib/liblldb"
+
+						local this_os = vim.uv.os_uname().sysname
+
+						-- Platform-specific paths
+						if this_os:find("Windows") then
+							codelldb_path = extension_path .. "/adapter/codelldb.exe"
+							liblldb_path = extension_path .. "/lldb/bin/liblldb.dll"
+						else
+							-- .so för Linux, .dylib för macOS
+							liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
+						end
+
+						return require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_path)
+					end,
 				},
 			}
 		end,
 	},
+
 	-- Crates.nvim för Cargo.toml hantering
 	{
 		"saecki/crates.nvim",
