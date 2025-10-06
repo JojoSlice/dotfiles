@@ -58,22 +58,7 @@ require("lazy").setup({
 		opts = function()
 			return {
 				on_attach = function(client, bufnr)
-					-- LSP keymaps för roslyn
-					local buf_map = function(mode, lhs, rhs, opts)
-						opts = vim.tbl_extend("force", { noremap = true, silent = true, buffer = bufnr }, opts or {})
-						vim.keymap.set(mode, lhs, rhs, opts)
-					end
-
-					buf_map("n", "gd", vim.lsp.buf.definition)
-					buf_map("n", "K", vim.lsp.buf.hover)
-					buf_map("n", "gr", vim.lsp.buf.references)
-					buf_map("n", "gi", vim.lsp.buf.implementation)
-					buf_map("n", "<leader>ca", vim.lsp.buf.code_action)
-					buf_map("n", "<leader>rn", vim.lsp.buf.rename)
-					buf_map("n", "<leader>f", function()
-						vim.lsp.buf.format({ async = true })
-					end)
-					buf_map("i", "<C-h>", vim.lsp.buf.signature_help)
+					setup_lsp_keymaps(bufnr)
 				end,
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
 			}
@@ -89,23 +74,15 @@ require("lazy").setup({
 			vim.g.rustaceanvim = {
 				server = {
 					on_attach = function(client, bufnr)
+						-- Standard LSP keymaps
+						setup_lsp_keymaps(bufnr)
+
+						-- Helper för Rust-specifika keymaps
 						local buf_map = function(mode, lhs, rhs, opts)
 							opts =
 								vim.tbl_extend("force", { noremap = true, silent = true, buffer = bufnr }, opts or {})
 							vim.keymap.set(mode, lhs, rhs, opts)
 						end
-
-						-- Standard LSP keymaps
-						buf_map("n", "gd", vim.lsp.buf.definition)
-						buf_map("n", "K", vim.lsp.buf.hover)
-						buf_map("n", "gr", vim.lsp.buf.references)
-						buf_map("n", "gi", vim.lsp.buf.implementation)
-						buf_map("n", "<leader>ca", vim.lsp.buf.code_action)
-						buf_map("n", "<leader>rn", vim.lsp.buf.rename)
-						buf_map("n", "<leader>f", function()
-							vim.lsp.buf.format({ async = true })
-						end)
-						buf_map("i", "<C-h>", vim.lsp.buf.signature_help)
 
 						-- Rust-specifika keymaps
 						buf_map("n", "<leader>re", "<Cmd>RustLsp explainError<CR>", { desc = "Explain Rust error" })
@@ -209,6 +186,8 @@ require("lazy").setup({
 	-- Completion
 	"hrsh7th/nvim-cmp",
 	"hrsh7th/cmp-nvim-lsp",
+	"hrsh7th/cmp-buffer",
+	"hrsh7th/cmp-path",
 	"L3MON4D3/LuaSnip",
 	"saadparwaiz1/cmp_luasnip",
 
@@ -216,6 +195,23 @@ require("lazy").setup({
 	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			defaults = {
+				file_ignore_patterns = {
+					"node_modules",
+					".git/",
+					"dist/",
+					"build/",
+					"target/",
+					"%.lock",
+				},
+				layout_config = {
+					horizontal = {
+						preview_width = 0.55,
+					},
+				},
+			},
+		},
 	},
 
 	-- Treesitter
@@ -229,7 +225,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter-context",
 		opts = {
 			enable = true,
-			max_lines = 0,
+			max_lines = 3,
 			min_window_height = 0,
 			line_numbers = true,
 			multiline_threshold = 20,
@@ -338,6 +334,7 @@ require("lazy").setup({
 	-- Git signs
 	{
 		"lewis6991/gitsigns.nvim",
+		event = { "BufReadPre", "BufNewFile" },
 		opts = {
 			signs = {
 				add = { text = "+" },
@@ -352,7 +349,52 @@ require("lazy").setup({
 	-- Comment plugin
 	{
 		"numToStr/Comment.nvim",
+		keys = {
+			{ "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
+			{ "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
+		},
 		opts = {},
+	},
+
+	-- Todo comments highlighting
+	{
+		"folke/todo-comments.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			signs = true,
+			keywords = {
+				FIX = { icon = " ", color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+				TODO = { icon = " ", color = "info" },
+				HACK = { icon = " ", color = "warning" },
+				WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+				PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+				NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+			},
+		},
+	},
+
+	-- Color highlighter
+	{
+		"norcalli/nvim-colorizer.lua",
+		event = { "BufReadPre", "BufNewFile" },
+		opts = {},
+	},
+
+	-- Oil.nvim - bättre filutforskare
+	{
+		"stevearc/oil.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		lazy = false,
+		opts = {
+			default_file_explorer = true,
+			columns = {
+				"icon",
+			},
+			view_options = {
+				show_hidden = true,
+			},
+		},
 	},
 
 	-- Notify
@@ -378,24 +420,24 @@ require("lazy").setup({
 				additional_curl_options = {},
 			})
 
-			-- Kulala keymaps
-			vim.keymap.set("n", "<leader>rr", function()
+			-- Kulala keymaps (ändrat från <leader>r* till <leader>k* för att undvika konflikt med Rust)
+			vim.keymap.set("n", "<leader>kr", function()
 				require("kulala").run()
 			end, { desc = "Run request" })
 
-			vim.keymap.set("n", "<leader>rp", function()
+			vim.keymap.set("n", "<leader>kp", function()
 				require("kulala").from_curl()
 			end, { desc = "From curl command" })
 
-			vim.keymap.set("n", "<leader>rc", function()
+			vim.keymap.set("n", "<leader>kc", function()
 				require("kulala").copy()
 			end, { desc = "Copy as curl" })
 
-			vim.keymap.set("n", "<leader>ri", function()
+			vim.keymap.set("n", "<leader>ki", function()
 				require("kulala").inspect()
 			end, { desc = "Inspect request" })
 
-			vim.keymap.set("n", "<leader>rt", function()
+			vim.keymap.set("n", "<leader>kt", function()
 				require("kulala").toggle_view()
 			end, { desc = "Toggle response/headers view" })
 		end,
@@ -427,9 +469,12 @@ require("lazy").setup({
 				{ "<leader>d", group = "Debug (DAP)" },
 				{ "<leader>ds", group = "Debug Step" },
 				{ "<leader>g", group = "Git" },
-				{ "<leader>r", group = "Rust/REST" },
+				{ "<leader>r", group = "Rust" },
+				{ "<leader>k", group = "Kulala (HTTP)" },
 				{ "<leader>s", group = "Search/Replace" },
 				{ "<leader>c", group = "Code" },
+				{ "<leader>p", group = "Oil (File explorer)" },
+				{ "<leader>b", group = "Buffer" },
 				{ "<leader>1", hidden = true },
 				{ "<leader>2", hidden = true },
 				{ "<leader>3", hidden = true },
@@ -440,16 +485,48 @@ require("lazy").setup({
 	},
 })
 
+-- Registrera Oil buffer keymaps i which-key när Oil öppnas
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "oil",
+	callback = function()
+		local wk_ok, wk = pcall(require, "which-key")
+		if not wk_ok then
+			return
+		end
+
+		wk.add({
+			buffer = vim.api.nvim_get_current_buf(),
+			{ "-", desc = "Go to parent directory" },
+			{ "_", desc = "Open current working directory" },
+			{ "`", desc = "Change directory" },
+			{ "~", desc = "Change directory (tab)" },
+			{ "<CR>", desc = "Select/open file or directory" },
+			{ "<C-s>", desc = "Open in vertical split" },
+			{ "<C-h>", desc = "Open in horizontal split" },
+			{ "<C-t>", desc = "Open in new tab" },
+			{ "<C-p>", desc = "Preview file" },
+			{ "<C-c>", desc = "Close Oil" },
+			{ "<C-l>", desc = "Refresh" },
+			{ "g.", desc = "Toggle hidden files" },
+			{ "g\\", desc = "Toggle trash" },
+			{ "gs", desc = "Change sort order" },
+			{ "gx", desc = "Open externally" },
+			{ "g?", desc = "Show help" },
+		})
+	end,
+})
+
 -- Grundläggande inställningar
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
-vim.o.scrolloff = 10
+vim.o.scrolloff = 20
 vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.hlsearch = true
 vim.o.clipboard = "unnamedplus"
 vim.o.termguicolors = true
 vim.o.wrap = true
@@ -460,7 +537,9 @@ vim.o.showbreak = "↪ "
 -- Keymaps
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.keymap.set("n", "<leader>pv", "<Cmd>Lexplore<CR>", { noremap = true, silent = true })
+
+-- Clear search highlighting
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlighting" })
 
 -- j/k: hoppar visuella rader om inget count anges
 vim.keymap.set("n", "j", function()
@@ -480,46 +559,75 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Window navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h")
-vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-k>", "<C-w>k")
-vim.keymap.set("n", "<C-l>", "<C-w>l")
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+
+-- Buffer navigation
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<CR>", { desc = "Close buffer" })
 
 -- Better visual mode indenting
-vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("v", ">", ">gv")
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
 -- Move lines up/down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
+
+-- Oil.nvim
+vim.keymap.set("n", "<leader>pv", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 
 -- Sätt colorscheme
 vim.cmd("colorscheme rose-pine")
 -- Sätt nvim-notify som standard notification handler
-vim.notify = require("notify")
+local notify_ok, notify = pcall(require, "notify")
+if notify_ok then
+	vim.notify = notify
+end
 
 -- LSP Setup med nya vim.lsp.enable (Neovim 0.11+)
 -- LSP capabilities för completion
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- On_attach funktion för LSP-servrar
-local on_attach = function(client, bufnr)
+-- Konfigurera diagnostics (virtual_text är disabled by default i 0.11)
+vim.diagnostic.config({
+	virtual_text = true,
+	signs = true,
+	update_in_insert = false,
+	underline = true,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = "always",
+	},
+})
+
+-- Delad funktion för att sätta LSP keymaps
+local function setup_lsp_keymaps(bufnr)
 	local buf_map = function(mode, lhs, rhs, opts)
 		opts = vim.tbl_extend("force", { noremap = true, silent = true, buffer = bufnr }, opts or {})
 		vim.keymap.set(mode, lhs, rhs, opts)
 	end
 
-	-- LSP keymaps
-	buf_map("n", "gd", vim.lsp.buf.definition)
-	buf_map("n", "K", vim.lsp.buf.hover)
-	buf_map("n", "gr", vim.lsp.buf.references)
-	buf_map("n", "gi", vim.lsp.buf.implementation)
-	buf_map("n", "<leader>ca", vim.lsp.buf.code_action)
-	buf_map("n", "<leader>rn", vim.lsp.buf.rename)
-	buf_map("n", "<leader>f", function()
+	-- Standard LSP keymaps
+	buf_map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+	buf_map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+	buf_map("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+	buf_map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+	buf_map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+	buf_map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename symbol" })
+	buf_map("n", "<leader>cf", function()
 		vim.lsp.buf.format({ async = true })
-	end)
-	buf_map("i", "<C-h>", vim.lsp.buf.signature_help)
+	end, { desc = "Format code" })
+	buf_map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
+end
+
+-- On_attach funktion för LSP-servrar
+local on_attach = function(client, bufnr)
+	setup_lsp_keymaps(bufnr)
 end
 
 -- Konfigurera LSP servers med vim.lsp.config innan vi enabler dem
@@ -601,15 +709,19 @@ if conform_ok then
 			rust = { "rustfmt" },
 		},
 		format_on_save = {
-			timeout_ms = 500,
+			timeout_ms = 1500,
 			lsp_fallback = true,
 		},
 	})
 end
 
 -- Completion setup
-local cmp = require("cmp")
-local luasnip = require("luasnip")
+local cmp_ok, cmp = pcall(require, "cmp")
+local luasnip_ok, luasnip = pcall(require, "luasnip")
+
+if not (cmp_ok and luasnip_ok) then
+	return
+end
 
 cmp.setup({
 	snippet = {
@@ -644,6 +756,8 @@ cmp.setup({
 		{ name = "nvim_lsp" },
 		{ name = "luasnip" },
 		{ name = "crates" },
+		{ name = "buffer" },
+		{ name = "path" },
 	}),
 	window = {
 		completion = cmp.config.window.bordered(),
@@ -652,11 +766,18 @@ cmp.setup({
 })
 
 -- Autopairs integration med cmp
-local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+local cmp_autopairs_ok, cmp_autopairs = pcall(require, "nvim-autopairs.completion.cmp")
+if cmp_autopairs_ok and cmp_ok then
+	cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+end
 
 -- Lualine setup
-require("lualine").setup({
+local lualine_ok, lualine = pcall(require, "lualine")
+if not lualine_ok then
+	return
+end
+
+lualine.setup({
 	options = {
 		icons_enabled = true,
 		theme = "rose-pine",
@@ -698,8 +819,12 @@ require("lualine").setup({
 })
 
 -- DAP Setup
-local dap = require("dap")
-local dapui = require("dapui")
+local dap_ok, dap = pcall(require, "dap")
+local dapui_ok, dapui = pcall(require, "dapui")
+
+if not (dap_ok and dapui_ok) then
+	return
+end
 
 -- DAP UI setup
 dapui.setup({
@@ -785,7 +910,12 @@ vim.keymap.set("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
 vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle DAP UI" })
 
 -- Treesitter
-require("nvim-treesitter.configs").setup({
+local treesitter_ok, treesitter_configs = pcall(require, "nvim-treesitter.configs")
+if not treesitter_ok then
+	return
+end
+
+treesitter_configs.setup({
 	ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml" },
 	highlight = {
 		enable = true,
@@ -796,12 +926,15 @@ require("nvim-treesitter.configs").setup({
 })
 
 -- Telescope
-local telescope = require("telescope.builtin")
-vim.keymap.set("n", "<leader>ff", telescope.find_files)
-vim.keymap.set("n", "<leader>fg", telescope.live_grep)
-vim.keymap.set("n", "<leader>fb", telescope.buffers)
-vim.keymap.set("n", "<leader>fh", telescope.help_tags)
-vim.keymap.set("n", "<leader>fd", telescope.diagnostics)
+local telescope_ok, telescope = pcall(require, "telescope.builtin")
+if not telescope_ok then
+	return
+end
+
+vim.keymap.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
+vim.keymap.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
+vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Help tags" })
+vim.keymap.set("n", "<leader>fd", telescope.diagnostics, { desc = "Diagnostics" })
 
 -- Förbättrad telescope buffer picker
 vim.keymap.set("n", "<leader>fb", function()
@@ -812,7 +945,11 @@ vim.keymap.set("n", "<leader>fb", function()
 end, { desc = "Find buffers" })
 
 -- Gitsigns keymaps
-local gitsigns = require("gitsigns")
+local gitsigns_ok, gitsigns = pcall(require, "gitsigns")
+if not gitsigns_ok then
+	return
+end
+
 vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Preview git hunk" })
 vim.keymap.set("n", "<leader>gt", gitsigns.toggle_current_line_blame, { desc = "Toggle git blame" })
 vim.keymap.set("n", "<leader>gb", function()
