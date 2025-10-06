@@ -1,0 +1,16 @@
+-- User custom options
+-- Copy this file to options.lua and customize your settings
+
+-- Example: Change tabstop
+-- vim.o.tabstop = 2
+-- vim.o.shiftwidth = 2
+
+-- Example: Change scrolloff
+-- vim.o.scrolloff = 8
+
+-- Example: Disable line numbers
+-- vim.o.number = false
+-- vim.o.relativenumber = false
+
+-- Example: Change clipboard behavior
+-- vim.o.clipboard = ""

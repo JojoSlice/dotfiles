@@ -1,0 +1,2 @@
+lua/user/*
+!lua/user/*.example

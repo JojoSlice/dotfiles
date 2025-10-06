@@ -5,6 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Disable Powerlevel10k instant prompt as it was causing issues
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+
 
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -70,8 +73,56 @@ alias ls='ls --color'
 alias c='clear'
 
 # Shell integrations
+
+# Add paths for user-installed binaries
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.dotnet/tools:$PATH"
+
 export PATH="$HOME/.fzf/bin:$PATH"
-eval "$(fzf --zsh)"
+# eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Initialize NVM (Node Version Manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Function to print centered and colored ASCII art
+center_art() {
+    # Return if not in interactive shell
+    [[ $- != *i* ]] && return
+
+    local art=(
+        "                                       ::::::::::: ::: ::::::::   ::::::::  ::::    ::: ::::::::::                                  "
+        "                   :+:     :+:            :+:     :+ :+:    :+: :+:    :+: :+:+:   :+: :+:                :+:     :+:               "
+        "    +:+:+:+:+:+:+   +:+ +:+              +:+        +:+        +:+    +:+ :+:+:+  +:+ +:+                  +:+ +:+   +:+:+:+:+:+:+  "
+        "                +#++:++#++:++           +#+        +#+        +#+    +:+ +#+ +:+ +#+ :#::+::#          +#++:++#++:++                "
+        "  +#+#+#+#+#+#+   +#+ +#+              +#+        +#+        +#+    +#+ +#+  +#+#+# +#+                  +#+ +#+   +#+#+#+#+#+#+    "
+        "               #+#     #+#        #+# #+#        #+#    #+# #+#    #+# #+#   #+#+# #+#                #+#     #+#                   "
+        "                                  #####          ########   ########  ###    #### ###                                               "
+    )
+
+    # Check if tput is available, otherwise do nothing
+    if ! command -v tput &> /dev/null; then
+        return
+    fi
+
+    local cyan=$(tput setaf 6)
+    local reset=$(tput sgr0)
+    local cols=$(tput cols)
+
+    for line in "${art[@]}"; do
+        local padding_len=$(( (cols - ${#line}) / 2 ))
+        if (( padding_len < 0 )); then
+            padding_len=0
+        fi
+        printf "%*s%s%s%s\n" "$padding_len" "" "$cyan" "$line" "$reset"
+    done
+}
+
+center_art
+unset -f center_art # Clean up the function after use
