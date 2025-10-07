@@ -120,7 +120,7 @@ center_art() {
         if (( padding_len < 0 )); then
             padding_len=0
         fi
-        printf "%*s%s%s%s\n" "$padding_len" "" "$cyan" "$line" "$reset"
+        printf "%*s%s%s%s\n" "$padding_len" "" "$blue" "$line" "$reset"
     done
 }
 
