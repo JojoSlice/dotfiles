@@ -126,3 +126,6 @@ center_art() {
 
 center_art
 unset -f center_art # Clean up the function after use
+
+# Always start in home directory
+cd ~
