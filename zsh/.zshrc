@@ -111,7 +111,7 @@ center_art() {
         return
     fi
 
-    local cyan=$(tput setaf 6)
+    local magenta=$(tput setaf 5)
     local reset=$(tput sgr0)
     local cols=$(tput cols)
 
@@ -120,7 +120,7 @@ center_art() {
         if (( padding_len < 0 )); then
             padding_len=0
         fi
-        printf "%*s%s%s%s\n" "$padding_len" "" "$blue" "$line" "$reset"
+        printf "%*s%s%s%s\n" "$padding_len" "" "$magenta" "$line" "$reset"
     done
 }
 
