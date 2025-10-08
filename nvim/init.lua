@@ -13,11 +13,15 @@ vim.opt.rtp:prepend(lazypath)
 
 require("config.options")
 
-require("lazy").setup("plugins")
+if not vim.g.lazy_did_setup then
+	require("lazy").setup("plugins")
 
-pcall(function()
-	require("lazy").setup("user")
-end)
+	pcall(function()
+		require("lazy").setup("user")
+	end)
+
+	vim.g.lazy_did_setup = true
+end
 
 require("config.keymaps")
 require("config.autocmds")
