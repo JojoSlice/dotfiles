@@ -31,9 +31,6 @@ return {
 				},
 				indent = { enable = true },
 				auto_install = true,
-				autotag = {
-					enable = true,
-				},
 			})
 		end,
 	},
