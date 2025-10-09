@@ -42,6 +42,7 @@ return {
 				"json-lsp",
 				"rust-analyzer",
 				"codelldb",
+				"svelte-language-server",
 			},
 		},
 	},
@@ -169,6 +170,7 @@ return {
 				json = { "prettier" },
 				cs = { "csharpier" },
 				rust = { "rustfmt" },
+				svelte = { "prettier" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
@@ -204,6 +206,7 @@ return {
 			vim.lsp.config("cssls", { capabilities = capabilities, on_attach = on_attach })
 			vim.lsp.config("jsonls", { capabilities = capabilities, on_attach = on_attach })
 			vim.lsp.config("eslint", { capabilities = capabilities, on_attach = on_attach })
+			vim.lsp.config("svelte", { capabilities = capabilities, on_attach = on_attach })
 
 			vim.lsp.enable("ts_ls")
 			vim.lsp.enable("lua_ls")
@@ -211,6 +214,7 @@ return {
 			vim.lsp.enable("cssls")
 			vim.lsp.enable("jsonls")
 			vim.lsp.enable("eslint")
+			vim.lsp.enable("svelte")
 		end,
 	},
 }
