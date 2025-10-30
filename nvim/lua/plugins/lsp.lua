@@ -21,7 +21,12 @@ return {
 
 	{
 		"williamboman/mason.nvim",
-		opts = {},
+		opts = {
+			registries = {
+				"github:mason-org/mason-registry",
+				"github:Crashdummyy/mason-registry",
+			},
+		},
 	},
 
 	{
@@ -43,6 +48,7 @@ return {
 				"rust-analyzer",
 				"codelldb",
 				"svelte-language-server",
+				"roslyn",
 			},
 		},
 	},
