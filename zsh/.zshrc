@@ -129,3 +129,5 @@ unset -f center_art # Clean up the function after use
 
 # Always start in home directory
 cd ~
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
