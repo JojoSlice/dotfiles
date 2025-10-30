@@ -49,6 +49,8 @@ return {
 				"codelldb",
 				"svelte-language-server",
 				"roslyn",
+				"yaml-language-server",
+				"actionlint",
 			},
 		},
 	},
@@ -177,6 +179,7 @@ return {
 				cs = { "csharpier" },
 				rust = { "rustfmt" },
 				svelte = { "prettier" },
+				yaml = { "prettier" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
@@ -213,6 +216,26 @@ return {
 			vim.lsp.config("jsonls", { capabilities = capabilities, on_attach = on_attach })
 			vim.lsp.config("eslint", { capabilities = capabilities, on_attach = on_attach })
 			vim.lsp.config("svelte", { capabilities = capabilities, on_attach = on_attach })
+			vim.lsp.config("yamlls", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+				settings = {
+					yaml = {
+						schemaStore = {
+							enable = true,
+							url = "https://www.schemastore.org/api/json/catalog.json",
+						},
+						schemas = {
+							["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+							["https://json.schemastore.org/github-action.json"] = "action.{yml,yaml}",
+						},
+						format = { enable = true },
+						validate = true,
+						completion = true,
+						hover = true,
+					},
+				},
+			})
 
 			vim.lsp.enable("ts_ls")
 			vim.lsp.enable("lua_ls")
@@ -221,6 +244,7 @@ return {
 			vim.lsp.enable("jsonls")
 			vim.lsp.enable("eslint")
 			vim.lsp.enable("svelte")
+			vim.lsp.enable("yamlls")
 		end,
 	},
 }
