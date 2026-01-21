@@ -24,7 +24,7 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte" },
+				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam" },
 				highlight = {
 					enable = true,
 					additional_vim_regex_highlighting = false,

@@ -180,6 +180,7 @@ return {
 				rust = { "rustfmt" },
 				svelte = { "prettier" },
 				yaml = { "prettier" },
+				gleam = { "gleam_format" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
@@ -236,6 +237,13 @@ return {
 					},
 				},
 			})
+			vim.lsp.config("gleam", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+				cmd = { "gleam", "lsp" },
+				filetypes = { "gleam" },
+				root_markers = { "gleam.toml" },
+			})
 
 			vim.lsp.enable("ts_ls")
 			vim.lsp.enable("lua_ls")
@@ -245,6 +253,7 @@ return {
 			vim.lsp.enable("eslint")
 			vim.lsp.enable("svelte")
 			vim.lsp.enable("yamlls")
+			vim.lsp.enable("gleam")
 		end,
 	},
 }
