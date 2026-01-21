@@ -52,7 +52,7 @@ Leader key is `Space`. Press it and wait to see all available keybindings via wh
 
 ## Features
 
-- **LSP** - Language server support with auto-completion (TypeScript, Lua, Rust, C#, HTML, CSS, JSON)
+- **LSP** - Language server support with auto-completion (TypeScript, Lua, Rust, C#, HTML, CSS, JSON, Svelte, YAML, Gleam)
 - **Completion** - nvim-cmp with LSP, snippets, and path completion
 - **Fuzzy Finder** - Telescope for files, grep, buffers, and help
 - **File Explorer** - Oil.nvim (edit directories like buffers)

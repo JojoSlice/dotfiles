@@ -1,96 +1,96 @@
 # Jojo's dotFiles
 
-Detta är en samling av mina konfigurationer. Vissa uppdateras ofta, andra mer sällan.
+This is a collection of my configurations. Some are updated frequently, others less so.
 
-Om du vill kan du följa mina uppdateringar genom att skapa en symbolisk länk från filerna i detta repo till den katalog där respektive config normalt ligger.
+If you'd like, you can follow my updates by creating symbolic links from the files in this repo to the directory where each config normally lives.
 
-Ett problem som jag planerar att åtgärda framöver är att vissa inställningar är hårdkodade för min egen dator. Till exempel pekar bakgrundsbilden i WezTerm på en fil som bara finns hos mig. Dessutom kommer eventuella anpassningar du själv gör att skrivas över vid varje git pull. Min ambition är att göra konfigurationerna mer modulära i framtiden.
+One issue I plan to address in the future is that some settings are hardcoded for my own machine. Additionally, any customizations you make will be overwritten on each git pull. My goal is to make the configurations more modular in the future.
 
-Jag kommer även lägga upp fler configs för andra verktyg och program som jag använder, när tid, ork och lust finns.
+I will also add more configs for other tools and programs I use, when time and motivation allow.
 
-Du kan använda en eller flera av dessa configs precis som du vill – de är helt fristående från varandra.
+You can use one or more of these configs however you like - they are completely independent from each other.
 
 
 
-## Konfigurationer
+## Configurations
 
-Här hittar du både installationsguider och tips på hur du kan anpassa varje konfiguration efter dina egna behov.
+Here you'll find both installation guides and tips on how to customize each configuration to your own needs.
 
-- [Neovim Configuration](#neovim-configuration)  
-  Min editor-setup för Neovim, med plugins, keybinds och inställningar för ett smidigare arbetsflöde.  
+- [Neovim Configuration](#neovim-configuration)
+  My editor setup for Neovim, with plugins, keybinds, and settings for a smoother workflow.
 
 - [Tmux Configuration](#tmux-configuration)
-  Inställningar för terminal-multiplexern Tmux.
+  Settings for the terminal multiplexer Tmux.
 
-- [Zsh Configuration](#zsh-configuration)  
-  Min konfiguration för Zsh-skalet, med alias, prompt-anpassningar och plugin-hantering.  
+- [Zsh Configuration](#zsh-configuration)
+  My configuration for the Zsh shell, with aliases, prompt customizations, and plugin management.
 
 
 
 
 # Neovim Configuration
 
-En modern och modulär Neovim-konfiguration i Lua, byggd för att vara enkel att anpassa och utöka.
+A modern and modular Neovim configuration in Lua, built to be easy to customize and extend.
 
-All detaljerad dokumentation, inklusive installation, funktioner, plugins och kortkommandon, har flyttats till sin egen dedikerade README-fil för att undvika dubbelarbete och göra underhållet enklare.
+All detailed documentation, including installation, features, plugins, and keybindings, has been moved to its own dedicated README file to avoid duplication and make maintenance easier.
 
-**[➡️ Gå till den detaljerade Neovim README:n](./nvim/README.md)**
+**[See the detailed Neovim README](./nvim/README.md)**
 
 
 
 # Tmux Configuration
 
-Detta är min konfiguration för [Tmux](https://github.com/tmux/tmux/wiki), en terminal-multiplexer.
+This is my configuration for [Tmux](https://github.com/tmux/tmux/wiki), a terminal multiplexer.
 
 ## Installation
 
-1.  **Installera Tmux:**
+1.  **Install Tmux:**
     *   **macOS:** `brew install tmux`
     *   **Linux (Ubuntu/Debian):** `sudo apt install tmux`
     *   **Linux (Arch):** `sudo pacman -S tmux`
 
-2.  **Installera konfigurationen:**
-    Skapa en symbolisk länk från din hemkatalog till `.tmux.conf`-filen i detta repo.
+2.  **Install the configuration:**
+    Create a symbolic link from your home directory to the `.tmux.conf` file in this repo.
 
     ```bash
-    # Ta bort en eventuell befintlig konfig
+    # Remove any existing config
     rm ~/.tmux.conf
 
-    # Länka den nya filen
+    # Link the new file
     ln -s /home/jojo/dev/dotfiles/tmux/.tmux.conf ~/.tmux.conf
     ```
-    *Notera: Sökvägen `/home/jojo/dev/dotfiles` är specifik för din maskin. Andra användare kan behöva byta ut den.*
+    *Note: The path `/home/jojo/dev/dotfiles` is specific to my machine. Other users may need to change it.*
 
-## Funktioner
+## Features
 
-Denna konfiguration anpassar Tmux med ett "Rose Pine"-färgschema och nya kortkommandon för enklare navigering.
+This configuration customizes Tmux with a "Rose Pine" color scheme and new keybindings for easier navigation.
 
-### Huvudfunktioner
-*   **Färgschema**: En komplett "Rose Pine"-tematisering för statusrad, fönster och paneler.
-*   **True Color**: Fullt stöd för 24-bitars färger i terminalen.
-*   **Standard-prefix**: Använder Tmux standardprefix `Ctrl+b`.
-*   **Snabbare Respons**: Kortare `escape-time` för bättre samspel med editorer som Neovim.
-*   **Zsh**: Sätter `zsh` som standardskal i nya fönster.
+### Main Features
+*   **Color Scheme**: A complete "Rose Pine" theme for status bar, windows, and panes.
+*   **True Color**: Full support for 24-bit colors in the terminal.
+*   **Default Prefix**: Uses the Tmux default prefix `Ctrl+b`.
+*   **Faster Response**: Shorter `escape-time` for better interaction with editors like Neovim.
+*   **Zsh**: Sets `zsh` as the default shell in new windows.
 
-### Kortkommandon (utöver standard)
-*   `t`: Skapa ett nytt fönster.
-*   `w`: Stäng nuvarande fönster.
-*   `Tab`: Gå till nästa fönster.
-*   `Shift+Tab`: Gå till föregående fönster.
-*   `v`: Dela fönstret vertikalt (skapar en ny panel till höger).
-*   `s`: Dela fönstret horisontellt (skapar en ny panel under).
+### Keybindings (beyond default)
+*   `t`: Create a new window.
+*   `w`: Close current window.
+*   `Tab`: Go to next window.
+*   `Shift+Tab`: Go to previous window.
+*   `v`: Split window vertically (creates a new pane to the right).
+*   `s`: Split window horizontally (creates a new pane below).
 
-### Statusrad
-*   **Position**: Placerad längst ner.
-*   **Vänster**: Visar sessionens namn.
-*   **Mitten**: Lista över öppna fönster.
-*   **Höger**: Datum och klockslag.
+### Status Bar
+*   **Position**: Placed at the bottom.
+*   **Left**: Shows session name.
+*   **Center**: List of open windows.
+*   **Right**: Date and time.
 
 
 # Zsh Configuration
 
-En kraftfull Zsh-konfiguration med Powerlevel10k, Zinit för plugin-hantering och diverse smarta verktyg.
+A powerful Zsh configuration with Powerlevel10k, Zinit for plugin management, and various smart tools.
 
-All detaljerad dokumentation, inklusive installation, plugins och kortkommandon, finns nu i en dedikerad README-fil i `zsh/`-mappen.
+All detailed documentation, including installation, plugins, and keybindings, is now in a dedicated README file in the `zsh/` folder.
 
-**[➡️ Gå till den detaljerade Zsh README:n](./zsh/README.md)**
+**[See the detailed Zsh README](./zsh/README.md)**

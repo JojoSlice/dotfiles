@@ -1,19 +1,19 @@
 # Zsh Configuration
 
-En kraftfull Zsh-konfiguration med Powerlevel10k prompt, intelligenta plugins och moderna utvecklarverktyg för en produktiv terminal-upplevelse.
+A powerful Zsh configuration with Powerlevel10k prompt, intelligent plugins, and modern developer tools for a productive terminal experience.
 
-## Innehåll
+## Contents
 
 - [Installation](#installation)
   - [Zsh](#zsh)
   - [Dependencies](#dependencies)
-- [Konfiguration](#konfiguration)
-- [Funktioner](#funktioner)
+- [Configuration](#configuration)
+- [Features](#features)
 - [Plugins](#plugins)
 - [Keybindings](#keybindings)
 - [Aliases](#aliases)
-- [Anpassning](#anpassning)
-- [Felsökning](#felsökning)
+- [Customization](#customization)
+- [Troubleshooting](#troubleshooting)
 
 ## Installation
 
@@ -26,18 +26,18 @@ En kraftfull Zsh-konfiguration med Powerlevel10k prompt, intelligenta plugins oc
 sudo apt update
 sudo apt install zsh
 
-# Sätt Zsh som default shell
+# Set Zsh as default shell
 chsh -s $(which zsh)
 ```
 
 #### macOS
 
 ```bash
-# Zsh är redan installerat på moderna macOS
-# För att uppdatera till senaste versionen:
+# Zsh is already installed on modern macOS
+# To update to the latest version:
 brew install zsh
 
-# Sätt som default shell
+# Set as default shell
 chsh -s /bin/zsh
 ```
 
@@ -53,19 +53,19 @@ sudo pacman -S zsh
 # Fedora
 sudo dnf install zsh
 
-# Sätt som default shell
+# Set as default shell
 chsh -s $(which zsh)
 ```
 
-**Verifiera installation:**
+**Verify installation:**
 ```bash
 zsh --version
-echo $SHELL  # Ska visa /bin/zsh eller liknande
+echo $SHELL  # Should show /bin/zsh or similar
 ```
 
 ### Dependencies
 
-#### Git (Obligatorisk för Zinit)
+#### Git (Required for Zinit)
 
 ```bash
 # Ubuntu/Debian
@@ -111,73 +111,76 @@ curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | 
 brew install zoxide
 ```
 
-**Cargo (alternativ för alla plattformar):**
+**Cargo (alternative for all platforms):**
 ```bash
-car<ctrl62>## Plugins
+cargo install zoxide
+```
 
-### Installerade Plugins
+## Plugins
 
-| Plugin | Beskrivning |
+### Installed Plugins
+
+| Plugin | Description |
 |--------|-------------|
-| **powerlevel10k** | Modern, snabb och anpassningsbar prompt |
-| **zsh-syntax-highlighting** | Realtids syntax highlighting |
-| **zsh-completions** | Ytterligare completions för vanliga kommandon |
-| **zsh-autosuggestions** | Förslag baserat på tidigare kommandon |
-| **fzf-tab** | Fuzzy finder integration för tab-completion |
+| **powerlevel10k** | Modern, fast, and customizable prompt |
+| **zsh-syntax-highlighting** | Real-time syntax highlighting |
+| **zsh-completions** | Additional completions for common commands |
+| **zsh-autosuggestions** | Suggestions based on previous commands |
+| **fzf-tab** | Fuzzy finder integration for tab-completion |
 
 ### Oh My Zsh Snippets
 
-| Snippet | Beskrivning |
+| Snippet | Description |
 |---------|-------------|
-| **command-not-found** | Föreslår paket när kommando inte hittas |
+| **command-not-found** | Suggests packages when command is not found |
 
 ## Keybindings
 
 ### Vi Mode Keybindings
 
-Grundläggande Vi-navigation är aktiverad (`bindkey -v`):
+Basic Vi navigation is enabled (`bindkey -v`):
 
-| Mode | Keybinding | Beskrivning |
+| Mode | Keybinding | Description |
 |------|------------|-------------|
-| Normal | `h/j/k/l` | Navigera i kommandot |
-| Normal | `w/b/e` | Hoppa mellan ord |
-| Normal | `0/$` | Början/slut av rad |
-| Normal | `dd` | Radera rad |
-| Normal | `cc` | Ändra rad |
-| Insert | `Esc` | Gå till normal mode |
+| Normal | `h/j/k/l` | Navigate in the command |
+| Normal | `w/b/e` | Jump between words |
+| Normal | `0/$` | Beginning/end of line |
+| Normal | `dd` | Delete line |
+| Normal | `cc` | Change line |
+| Insert | `Esc` | Go to normal mode |
 
 ### Custom Keybindings
 
-| Keybinding | Beskrivning |
+| Keybinding | Description |
 |------------|-------------|
-| `Ctrl+J` | Sök bakåt i historik |
-| `Ctrl+K` | Sök framåt i historik |
-| `Ctrl+R` | FZF historik-sökning (från FZF integration) |
-| `Ctrl+T` | FZF fil-sökning (från FZF integration) |
-| `Alt+C` | FZF katalog-sökning (från FZF integration) |
+| `Ctrl+J` | Search backward in history |
+| `Ctrl+K` | Search forward in history |
+| `Ctrl+R` | FZF history search (from FZF integration) |
+| `Ctrl+T` | FZF file search (from FZF integration) |
+| `Alt+C` | FZF directory search (from FZF integration) |
 | `Tab` | FZF tab-completion |
 
 ### Autosuggestions
 
-| Keybinding | Beskrivning |
+| Keybinding | Description |
 |------------|-------------|
-| `→` (högerpil) | Acceptera hela förslaget |
-| `Ctrl+→` | Acceptera ett ord från förslaget |
-| `Ctrl+E` | Acceptera hela förslaget (alternativ) |
+| `→` (right arrow) | Accept entire suggestion |
+| `Ctrl+→` | Accept one word from suggestion |
+| `Ctrl+E` | Accept entire suggestion (alternative) |
 
 ## Aliases
 
 ### Standard Aliases
 
-| Alias | Kommando | Beskrivning |
-|-------|----------|-------------|
-| `winhome` | `cd /mnt/c/Users/Johan/` | Gå till Windows home (WSL) |
-| `ls` | `ls --color` | Färgad ls-output |
-| `c` | `clear` | Rensa skärmen |
+| Alias | Command | Description |
+|-------|---------|-------------|
+| `winhome` | `cd /mnt/c/Users/Johan/` | Go to Windows home (WSL) |
+| `ls` | `ls --color` | Colored ls output |
+| `c` | `clear` | Clear screen |
 
-### Lägg Till Fler Aliases
+### Add More Aliases
 
-Lägg till i `~/.zshrc`:
+Add to `~/.zshrc`:
 
 ```bash
 # Git aliases
@@ -193,8 +196,8 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # Modern replacements
-alias cat='bat'  # Om du har bat installerat
-alias find='fd'  # Om du har fd installerat
+alias cat='bat'  # If you have bat installed
+alias find='fd'  # If you have fd installed
 
 # Docker
 alias d='docker'
@@ -214,85 +217,85 @@ alias pip='pip3'
 
 ## History Settings
 
-### Konfigurerade Inställningar
+### Configured Settings
 
 ```bash
-HISTSIZE=5000              # 5000 kommandon i minnet
-SAVEHIST=5000              # 5000 kommandon sparade
-HISTFILE=~/.zsh_history    # Historik-fil
+HISTSIZE=5000              # 5000 commands in memory
+SAVEHIST=5000              # 5000 commands saved
+HISTFILE=~/.zsh_history    # History file
 ```
 
-### History Beteende
+### History Behavior
 
-- `appendhistory`: Lägg till istället för att skriva över
-- `sharehistory`: Dela historik mellan sessioner
-- `hist_ignore_space`: Ignorera kommandon som börjar med mellanslag
-- `hist_ignore_all_dups`: Ta bort alla duplicerade kommandon
-- `hist_save_no_dups`: Spara inte duplicerade kommandon
-- `hist_find_no_dups`: Visa inte duplicerade kommandon vid sökning
+- `appendhistory`: Append instead of overwrite
+- `sharehistory`: Share history between sessions
+- `hist_ignore_space`: Ignore commands starting with space
+- `hist_ignore_all_dups`: Remove all duplicate commands
+- `hist_save_no_dups`: Don't save duplicate commands
+- `hist_find_no_dups`: Don't show duplicate commands when searching
 
-### Använda Historik
+### Using History
 
 ```bash
-# Sök i historik
+# Search in history
 Ctrl+R           # FZF fuzzy search
 
-# Vi mode historik
-Ctrl+J           # Föregående matchande kommando
-Ctrl+K           # Nästa matchande kommando
+# Vi mode history
+Ctrl+J           # Previous matching command
+Ctrl+K           # Next matching command
 
-# Traditionell historik
-history          # Visa all historik
-history 20       # Visa senaste 20
-!!               # Kör senaste kommandot
-!$               # Senaste argumentet från förra kommandot
-!abc             # Kör senaste kommando som började med 'abc'
+# Traditional history
+history          # Show all history
+history 20       # Show last 20
+!!               # Run last command
+!$               # Last argument from previous command
+!abc             # Run last command starting with 'abc'
 ```
 
-## Anpassning
+## Customization
 
-### Ändra Powerlevel10k Stil
+### Change Powerlevel10k Style
 
 ```bash
-# Kör konfigurationsguide
+# Run configuration wizard
 p10k configure
 
-# Eller redigera direkt
+# Or edit directly
 nano ~/.p10k.zsh
 ```
 
-### Lägg Till Fler Plugins
+### Add More Plugins
 
 ```bash
-# I .zshrc, lägg till efter befintliga plugins:
+# In .zshrc, add after existing plugins:
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
 zinit light MichaelAquilina/zsh-you-should-use
 ```
 
-**Populära plugins:**
-- `fast-syntax-highlighting`: Snabbare syntax highlighting
-- `zsh-history-substring-search`: Sök i historik med pilar
-- `zsh-you-should-use`: Påminner dig om dina aliases
-- `zsh-autoenv`: Automatisk aktivering av Python venv
-- `extract`: Universell extraktions-funktion för arkiv
+**Popular plugins:**
+- `fast-syntax-highlighting`: Faster syntax highlighting
+- `zsh-history-substring-search`: Search history with arrows
+- `zsh-you-should-use`: Reminds you about your aliases
+- `zsh-autoenv`: Automatic Python venv activation
+- `extract`: Universal extraction function for archives
 
-### Custom Funktioner
+### Custom Functions
 
-Lägg till i `~/.zshrc`:
+Add to `~/.zshrc`:
 
 ```bash
-# Skapa katalog och cd till den
+# Create directory and cd into it
 mkcd() {
     mkdir -p "$1" && cd "$1"
 }
 
-# Backup av fil
+# Backup a file
 backup() {
     cp "$1" "$1.backup-$(date +%Y%m%d-%H%M%S)"
 }
 
-# Extract arkiv
+# Extract archives
 extract() {
     if [ -f "$1" ]; then
         case "$1" in
@@ -314,7 +317,7 @@ extract() {
     fi
 }
 
-# Snabb git commit
+# Quick git commit
 gcm() {
     git commit -m "$*"
 }
@@ -322,14 +325,14 @@ gcm() {
 
 ### Completion Styling
 
-Redan konfigurerat i denna setup:
+Already configured in this setup:
 - Case-insensitive completion
-- Färgad completion-meny
-- FZF preview för cd och zoxide
+- Colored completion menu
+- FZF preview for cd and zoxide
 
-**Anpassa ytterligare:**
+**Customize further:**
 ```bash
-# I .zshrc
+# In .zshrc
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
@@ -339,36 +342,36 @@ zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 
 ### FZF Keybindings
 
-| Keybinding | Beskrivning |
+| Keybinding | Description |
 |------------|-------------|
-| `Ctrl+R` | Sök i command history |
-| `Ctrl+T` | Sök efter filer rekursivt |
-| `Alt+C` | Sök och cd till katalog |
+| `Ctrl+R` | Search in command history |
+| `Ctrl+T` | Search for files recursively |
+| `Alt+C` | Search and cd to directory |
 
-### Använda FZF
+### Using FZF
 
 ```bash
-# Sök i historik och kör
+# Search history and run
 Ctrl+R
 
-# Hitta och öppna fil i editor
+# Find and open file in editor
 nvim $(fzf)
 
-# Multiselect i FZF
-# Tryck Tab för att markera flera filer
-# Shift+Tab för att avmarkera
+# Multiselect in FZF
+# Press Tab to select multiple files
+# Shift+Tab to deselect
 
-# FZF i pipes
+# FZF in pipes
 ls | fzf
 git branch | fzf
 ```
 
 ### FZF Customization
 
-Lägg till i `~/.zshrc`:
+Add to `~/.zshrc`:
 
 ```bash
-# FZF colors (Rose Pine tema)
+# FZF colors (Rose Pine theme)
 export FZF_DEFAULT_OPTS="
 --color=fg:#908caa,bg:#232136,hl:#ea9a97
 --color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
@@ -377,111 +380,111 @@ export FZF_DEFAULT_OPTS="
 --color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa
 "
 
-# FZF default command (kräver fd eller ripgrep)
+# FZF default command (requires fd or ripgrep)
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 ```
 
 ## Zoxide Usage
 
-Zoxide lär sig dina mest besökta kataloger:
+Zoxide learns your most visited directories:
 
 ```bash
-# Första gången: cd normalt
-cd ~/projekt/my-app
+# First time: cd normally
+cd ~/projects/my-app
 
-# Senare: hoppa direkt
-cd my-app        # Fungerar från var som helst!
+# Later: jump directly
+cd my-app        # Works from anywhere!
 
-# Interaktiv sökning
-cdi              # Söker med FZF
+# Interactive search
+cdi              # Searches with FZF
 
-# Visa databas
+# Show database
 zoxide query --list
 
-# Ta bort från databas
+# Remove from database
 zoxide remove ~/old-project
 ```
 
-## Felsökning
+## Troubleshooting
 
-### Zinit installeras inte
+### Zinit doesn't install
 
 ```bash
-# Manuell installation
+# Manual installation
 mkdir -p ~/.local/share/zinit
 git clone https://github.com/zdharma-continuum/zinit.git ~/.local/share/zinit/zinit.git
 source ~/.zshrc
 ```
 
-### Powerlevel10k instant prompt varning
+### Powerlevel10k instant prompt warning
 
-Om du får varningar om instant prompt:
+If you get warnings about instant prompt:
 ```bash
-# Rensa cache
+# Clear cache
 rm -rf ~/.cache/p10k-*
 
-# Kör om konfiguration
+# Re-run configuration
 p10k configure
 ```
 
-### Plugins laddar långsamt
+### Plugins load slowly
 
 ```bash
-# Använd Zinit turbo mode
-# Lägg till 'wait' för att ladda plugin asynkront
+# Use Zinit turbo mode
+# Add 'wait' to load plugin asynchronously
 zinit wait lucid light zsh-users/zsh-syntax-highlighting
 ```
 
-### Nerd Font ikoner visas inte
+### Nerd Font icons not showing
 
-1. Installera en Nerd Font (se Dependencies)
-2. Konfigurera din terminal att använda fonten
-3. Kör `p10k configure` igen
+1. Install a Nerd Font (see Dependencies)
+2. Configure your terminal to use the font
+3. Run `p10k configure` again
 
-### FZF fungerar inte
+### FZF doesn't work
 
 ```bash
-# Verifiera installation
+# Verify installation
 fzf --version
 
-# Reinstallera FZF integration
+# Reinstall FZF integration
 ~/.fzf/install --all
 
-# Source .zshrc igen
+# Source .zshrc again
 source ~/.zshrc
 ```
 
-### Zoxide cd fungerar inte
+### Zoxide cd doesn't work
 
 ```bash
-# Verifiera installation
+# Verify installation
 zoxide --version
 
-# Kontrollera init line i .zshrc
+# Check init line in .zshrc
 eval "$(zoxide init --cmd cd zsh)"
 
-# Bygg databas genom att cd:a runt
-cd ~/projekt
-cd ~/dokument
+# Build database by cd'ing around
+cd ~/projects
+cd ~/documents
 # etc...
 ```
 
-### Autosuggestions visas inte
+### Autosuggestions not showing
 
 ```bash
-# Kontrollera plugin
+# Check plugin
 zinit list | grep autosuggestions
 
-# Återinstallera
+# Reinstall
 zinit delete zsh-users/zsh-autosuggestions
 zinit load zsh-users/zsh-autosuggestions
 ```
 
-### Completion fungerar inte
+### Completion doesn't work
 
 ```bash
-# Återbygg completion cache
+# Rebuild completion cache
 rm -f ~/.zcompdump
 compinit
 
@@ -491,13 +494,13 @@ source ~/.zshrc
 
 ## Performance Tips
 
-### Snabbare Start
+### Faster Startup
 
 ```bash
-# Profiliera startup-tid
+# Profile startup time
 time zsh -i -c exit
 
-# Om > 1 sekund, använd zinit turbo mode mer:
+# If > 1 second, use zinit turbo mode more:
 zinit wait lucid for \
     atinit"zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
@@ -505,36 +508,36 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions
 ```
 
-### Kompaktera History
+### Compact History
 
 ```bash
-# Ta bort duplicates från historik
+# Remove duplicates from history
 sort -u ~/.zsh_history > ~/.zsh_history.tmp
 mv ~/.zsh_history.tmp ~/.zsh_history
 ```
 
-## Användbara Kommandon
+## Useful Commands
 
 ### Zinit Management
 
 ```bash
-zinit self-update              # Uppdatera Zinit
-zinit update                   # Uppdatera alla plugins
-zinit update zsh-users/zsh-syntax-highlighting  # Uppdatera specifik plugin
-zinit list                     # Lista installerade plugins
-zinit delete PLUGIN_NAME       # Ta bort plugin
+zinit self-update              # Update Zinit
+zinit update                   # Update all plugins
+zinit update zsh-users/zsh-syntax-highlighting  # Update specific plugin
+zinit list                     # List installed plugins
+zinit delete PLUGIN_NAME       # Remove plugin
 ```
 
 ### Zsh Management
 
 ```bash
-source ~/.zshrc               # Reload konfiguration
-exec zsh                      # Starta om shell
-compinit                      # Återbygg completions
-rehash                        # Uppdatera command cache
+source ~/.zshrc               # Reload configuration
+exec zsh                      # Restart shell
+compinit                      # Rebuild completions
+rehash                        # Update command cache
 ```
 
-## Resurser
+## Resources
 
 - **Zinit**: [https://github.com/zdharma-continuum/zinit](https://github.com/zdharma-continuum/zinit)
 - **Powerlevel10k**: [https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
@@ -542,12 +545,12 @@ rehash                        # Uppdatera command cache
 - **Zoxide**: [https://github.com/ajeetdsouza/zoxide](https://github.com/ajeetdsouza/zoxide)
 - **Awesome Zsh Plugins**: [https://github.com/unixorn/awesome-zsh-plugins](https://github.com/unixorn/awesome-zsh-plugins)
 
-## Rekommenderade Tillägg
+## Recommended Additions
 
 ### Modern CLI Tools
 
 ```bash
-# Installera moderna replacements
+# Install modern replacements
 # bat - better cat
 # exa/eza - better ls
 # fd - better find
@@ -561,7 +564,7 @@ sudo apt install bat exa fd-find ripgrep
 brew install bat exa fd ripgrep git-delta
 ```
 
-Lägg sedan till aliases:
+Then add aliases:
 ```bash
 alias cat='bat'
 alias ls='exa --icons'
@@ -573,15 +576,15 @@ alias grep='rg'
 
 ## Tips & Tricks
 
-1. **Snabb cd**: Skriv bara `cd my-proj` istället för full sökväg tack vare zoxide
-2. **History search**: `Ctrl+R` och börja skriva - FZF visar matchande kommandon
-3. **Accept suggestions**: Tryck `→` för att acceptera grå förslag
-4. **Tab everywhere**: Tryck Tab ofta för FZF completion
-5. **Vi mode**: `Esc` för att gå till normal mode och använda Vi-kommandon
-6. **Ignore history**: Starta kommando med mellanslag för att inte spara i historik
-7. **Quick edit**: `fc` öppnar senaste kommandot i editor
-8. **Multiple commands**: Använd `;` eller `&&` mellan kommandon
+1. **Quick cd**: Just type `cd my-proj` instead of full path thanks to zoxide
+2. **History search**: `Ctrl+R` and start typing - FZF shows matching commands
+3. **Accept suggestions**: Press `→` to accept gray suggestions
+4. **Tab everywhere**: Press Tab often for FZF completion
+5. **Vi mode**: `Esc` to go to normal mode and use Vi commands
+6. **Ignore history**: Start command with space to not save in history
+7. **Quick edit**: `fc` opens last command in editor
+8. **Multiple commands**: Use `;` or `&&` between commands
 
-## Licens
+## License
 
-Denna konfiguration är fri att använda och modifiera.
+This configuration is free to use and modify.
