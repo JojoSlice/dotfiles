@@ -1,3 +1,9 @@
+# Start SSH agent automatically and add key
+if [ -z "$SSH_AUTH_SOCK" ]; then
+   eval "$(ssh-agent -s)" > /dev/null
+   ssh-add ~/.ssh/id_ed25519 2>/dev/null
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
