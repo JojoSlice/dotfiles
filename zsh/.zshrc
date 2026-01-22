@@ -137,3 +137,5 @@ unset -f center_art # Clean up the function after use
 cd ~
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
