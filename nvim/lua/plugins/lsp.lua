@@ -51,6 +51,8 @@ return {
 				"roslyn",
 				"yaml-language-server",
 				"actionlint",
+				"pyright",
+				"ruff",
 			},
 		},
 	},
@@ -181,6 +183,7 @@ return {
 				svelte = { "prettier" },
 				yaml = { "prettier" },
 				gleam = { "gleam_format" },
+				python = { "ruff_format", "ruff_organize_imports" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
@@ -245,6 +248,21 @@ return {
 				root_markers = { "gleam.toml" },
 			})
 
+			vim.lsp.config("pyright", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+				settings = {
+					python = {
+						analysis = {
+							typeCheckingMode = "basic",
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "workspace",
+						},
+					},
+				},
+			})
+
 			vim.lsp.enable("ts_ls")
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("html")
@@ -254,6 +272,7 @@ return {
 			vim.lsp.enable("svelte")
 			vim.lsp.enable("yamlls")
 			vim.lsp.enable("gleam")
+			vim.lsp.enable("pyright")
 		end,
 	},
 }
