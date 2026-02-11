@@ -1,7 +1,11 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+			"nvim-telescope/telescope-ui-select.nvim",
+		},
 		opts = {
 			defaults = {
 				file_ignore_patterns = {
@@ -16,7 +20,18 @@ return {
 					horizontal = { preview_width = 0.55 },
 				},
 			},
+			extensions = {
+				["ui-select"] = {
+					require("telescope.themes").get_dropdown(),
+				},
+			},
 		},
+		config = function(_, opts)
+			local telescope = require("telescope")
+			telescope.setup(opts)
+			telescope.load_extension("fzf")
+			telescope.load_extension("ui-select")
+		end,
 	},
 
 	{
@@ -24,7 +39,7 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam", "python" },
+				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam", "python", "dart", "yaml", "markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex" },
 				highlight = {
 					enable = true,
 					additional_vim_regex_highlighting = false,
@@ -79,12 +94,42 @@ return {
 	},
 
 	{
-		"numToStr/Comment.nvim",
-		keys = {
-			{ "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
-			{ "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
-		},
+		"kylechui/nvim-surround",
+		version = "*",
+		event = "VeryLazy",
 		opts = {},
+	},
+
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							["af"] = { query = "@function.outer", desc = "Around function" },
+							["if"] = { query = "@function.inner", desc = "Inside function" },
+							["ac"] = { query = "@class.outer", desc = "Around class" },
+							["ic"] = { query = "@class.inner", desc = "Inside class" },
+						},
+					},
+					move = {
+						enable = true,
+						set_jumps = true,
+						goto_next_start = {
+							["]m"] = { query = "@function.outer", desc = "Next function start" },
+						},
+						goto_prev_start = {
+							["[m"] = { query = "@function.outer", desc = "Previous function start" },
+						},
+					},
+				},
+			})
+		end,
 	},
 
 	{
@@ -107,10 +152,12 @@ return {
 	{
 		"ThePrimeagen/harpoon",
 		branch = "harpoon2",
-		opts = {
-			menu = { width = vim.api.nvim_win_get_width(0) - 4 },
-			settings = { save_on_toggle = true },
-		},
+		opts = function()
+			return {
+				menu = { width = vim.api.nvim_win_get_width(0) - 4 },
+				settings = { save_on_toggle = true },
+			}
+		end,
 		keys = function()
 			local keys = {
 				{

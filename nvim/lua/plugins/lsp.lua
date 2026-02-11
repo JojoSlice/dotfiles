@@ -1,23 +1,74 @@
-local function setup_lsp_keymaps(bufnr)
-	local buf_map = function(mode, lhs, rhs, opts)
-		opts = vim.tbl_extend("force", { noremap = true, silent = true, buffer = bufnr }, opts or {})
-		vim.keymap.set(mode, lhs, rhs, opts)
-	end
-
-	buf_map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-	buf_map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
-	buf_map("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
-	buf_map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-	buf_map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-	buf_map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename symbol" })
-	buf_map("n", "<leader>cf", function()
-		vim.lsp.buf.format({ async = true })
-	end, { desc = "Format code" })
-	buf_map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
-end
-
 return {
-	"neovim/nvim-lspconfig",
+	{
+		"neovim/nvim-lspconfig",
+		config = function()
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+			local simple_servers = { "ts_ls", "html", "cssls", "jsonls", "eslint", "svelte" }
+			for _, server in ipairs(simple_servers) do
+				vim.lsp.config(server, { capabilities = capabilities })
+			end
+
+			vim.lsp.config("lua_ls", {
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						runtime = { version = "LuaJIT" },
+						diagnostics = { globals = { "vim" } },
+						workspace = {
+							library = { vim.env.VIMRUNTIME },
+							checkThirdParty = false,
+						},
+						telemetry = { enable = false },
+					},
+				},
+			})
+			vim.lsp.config("yamlls", {
+				capabilities = capabilities,
+				settings = {
+					yaml = {
+						schemaStore = {
+							enable = true,
+							url = "https://www.schemastore.org/api/json/catalog.json",
+						},
+						schemas = {
+							["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+							["https://json.schemastore.org/github-action.json"] = "action.{yml,yaml}",
+						},
+						format = { enable = true },
+						validate = true,
+						completion = true,
+						hover = true,
+					},
+				},
+			})
+			vim.lsp.config("gleam", {
+				capabilities = capabilities,
+				cmd = { "gleam", "lsp" },
+				filetypes = { "gleam" },
+				root_markers = { "gleam.toml" },
+			})
+
+			vim.lsp.config("pyright", {
+				capabilities = capabilities,
+				settings = {
+					python = {
+						analysis = {
+							typeCheckingMode = "basic",
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "workspace",
+						},
+					},
+				},
+			})
+
+			local all_servers = { "ts_ls", "lua_ls", "html", "cssls", "jsonls", "eslint", "svelte", "yamlls", "gleam", "pyright" }
+			for _, server in ipairs(all_servers) do
+				vim.lsp.enable(server)
+			end
+		end,
+	},
 
 	{
 		"williamboman/mason.nvim",
@@ -37,8 +88,6 @@ return {
 				"stylua",
 				"prettier",
 				"csharpier",
-				"js-debug-adapter",
-				"netcoredbg",
 				"typescript-language-server",
 				"lua-language-server",
 				"html-lsp",
@@ -46,7 +95,6 @@ return {
 				"eslint-lsp",
 				"json-lsp",
 				"rust-analyzer",
-				"codelldb",
 				"svelte-language-server",
 				"roslyn",
 				"yaml-language-server",
@@ -62,9 +110,6 @@ return {
 		ft = "cs",
 		opts = function()
 			return {
-				on_attach = function(client, bufnr)
-					setup_lsp_keymaps(bufnr)
-				end,
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
 			}
 		end,
@@ -78,8 +123,6 @@ return {
 			vim.g.rustaceanvim = {
 				server = {
 					on_attach = function(client, bufnr)
-						setup_lsp_keymaps(bufnr)
-
 						local buf_map = function(mode, lhs, rhs, opts)
 							opts =
 								vim.tbl_extend("force", { noremap = true, silent = true, buffer = bufnr }, opts or {})
@@ -183,96 +226,13 @@ return {
 				svelte = { "prettier" },
 				yaml = { "prettier" },
 				gleam = { "gleam_format" },
+				dart = { "dart_format" },
 				python = { "ruff_format", "ruff_organize_imports" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
-				lsp_fallback = true,
+				lsp_format = "fallback",
 			},
 		},
-		config = function(_, opts)
-			local conform = require("conform")
-			conform.setup(opts)
-
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			local on_attach = function(client, bufnr)
-				setup_lsp_keymaps(bufnr)
-			end
-
-			vim.lsp.config("ts_ls", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("lua_ls", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = {
-					Lua = {
-						runtime = { version = "LuaJIT" },
-						diagnostics = { globals = { "vim" } },
-						workspace = {
-							library = { vim.env.VIMRUNTIME },
-							checkThirdParty = false,
-						},
-						telemetry = { enable = false },
-					},
-				},
-			})
-			vim.lsp.config("html", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("cssls", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("jsonls", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("eslint", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("svelte", { capabilities = capabilities, on_attach = on_attach })
-			vim.lsp.config("yamlls", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = {
-					yaml = {
-						schemaStore = {
-							enable = true,
-							url = "https://www.schemastore.org/api/json/catalog.json",
-						},
-						schemas = {
-							["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-							["https://json.schemastore.org/github-action.json"] = "action.{yml,yaml}",
-						},
-						format = { enable = true },
-						validate = true,
-						completion = true,
-						hover = true,
-					},
-				},
-			})
-			vim.lsp.config("gleam", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				cmd = { "gleam", "lsp" },
-				filetypes = { "gleam" },
-				root_markers = { "gleam.toml" },
-			})
-
-			vim.lsp.config("pyright", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = {
-					python = {
-						analysis = {
-							typeCheckingMode = "basic",
-							autoSearchPaths = true,
-							useLibraryCodeForTypes = true,
-							diagnosticMode = "workspace",
-						},
-					},
-				},
-			})
-
-			vim.lsp.enable("ts_ls")
-			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("html")
-			vim.lsp.enable("cssls")
-			vim.lsp.enable("jsonls")
-			vim.lsp.enable("eslint")
-			vim.lsp.enable("svelte")
-			vim.lsp.enable("yamlls")
-			vim.lsp.enable("gleam")
-			vim.lsp.enable("pyright")
-		end,
 	},
 }
