@@ -39,21 +39,24 @@ return {
 		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			-- New rewrite API: setup only accepts install_dir
-			require("nvim-treesitter").setup()
-			-- Install parsers asynchronously
+			require("nvim-treesitter").setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
+			})
 			require("nvim-treesitter").install({
 				"lua", "javascript", "typescript", "html", "css", "c_sharp", "json",
 				"rust", "toml", "svelte", "gleam", "python", "dart", "yaml",
 				"markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex",
-				"go", "gomod", "gosum", "gowork",
+				"go", "gomod", "gosum", "gowork", "query",
 			})
-			-- Enable treesitter highlighting and indentation per filetype
 			vim.api.nvim_create_autocmd("FileType", {
 				callback = function()
 					pcall(vim.treesitter.start)
 				end,
 			})
+			-- Start treesitter for current buffer (FileType may have already fired)
+			vim.schedule(function()
+				pcall(vim.treesitter.start)
+			end)
 		end,
 	},
 
@@ -91,6 +94,7 @@ return {
 
 	{
 		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		opts = {
 			enable = true,
 			max_lines = 3,
