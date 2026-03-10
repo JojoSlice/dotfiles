@@ -89,6 +89,7 @@ return {
 				"netcoredbg",
 				"codelldb",
 				"debugpy",
+				"delve",
 			},
 			handlers = {
 				python = function(config)

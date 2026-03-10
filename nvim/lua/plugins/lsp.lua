@@ -4,7 +4,7 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-			local simple_servers = { "ts_ls", "html", "cssls", "jsonls", "eslint", "svelte" }
+			local simple_servers = { "ts_ls", "html", "cssls", "jsonls", "eslint", "svelte", "gopls" }
 			for _, server in ipairs(simple_servers) do
 				vim.lsp.config(server, { capabilities = capabilities })
 			end
@@ -63,7 +63,7 @@ return {
 				},
 			})
 
-			local all_servers = { "ts_ls", "lua_ls", "html", "cssls", "jsonls", "eslint", "svelte", "yamlls", "gleam", "pyright" }
+			local all_servers = { "ts_ls", "lua_ls", "html", "cssls", "jsonls", "eslint", "svelte", "yamlls", "gleam", "pyright", "gopls" }
 			for _, server in ipairs(all_servers) do
 				vim.lsp.enable(server)
 			end
@@ -101,6 +101,8 @@ return {
 				"actionlint",
 				"pyright",
 				"ruff",
+				"gopls",
+				"goimports",
 			},
 		},
 	},
@@ -228,6 +230,7 @@ return {
 				gleam = { "gleam_format" },
 				dart = { "dart_format" },
 				python = { "ruff_format", "ruff_organize_imports" },
+			go = { "goimports" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,

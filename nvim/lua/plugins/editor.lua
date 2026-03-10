@@ -39,7 +39,7 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam", "python", "dart", "yaml", "markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex" },
+				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam", "python", "dart", "yaml", "markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex", "go", "gomod", "gosum", "gowork" },
 				highlight = {
 					enable = true,
 					additional_vim_regex_highlighting = false,
