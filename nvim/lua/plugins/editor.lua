@@ -36,17 +36,43 @@ return {
 
 	{
 		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "lua", "javascript", "typescript", "html", "css", "c_sharp", "json", "rust", "toml", "svelte", "gleam", "python", "dart", "yaml", "markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex", "go", "gomod", "gosum", "gowork" },
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = false,
-				},
-				indent = { enable = true },
-				auto_install = true,
+			-- New rewrite API: setup only accepts install_dir
+			require("nvim-treesitter").setup()
+			-- Install parsers asynchronously
+			require("nvim-treesitter").install({
+				"lua", "javascript", "typescript", "html", "css", "c_sharp", "json",
+				"rust", "toml", "svelte", "gleam", "python", "dart", "yaml",
+				"markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex",
+				"go", "gomod", "gosum", "gowork",
 			})
+			-- Enable treesitter highlighting and indentation per filetype
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					pcall(vim.treesitter.start)
+				end,
+			})
+		end,
+	},
+
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("nvim-treesitter-textobjects").setup({
+				select = { lookahead = true },
+				move = { set_jumps = true },
+			})
+			local select = require("nvim-treesitter-textobjects.select")
+			local move = require("nvim-treesitter-textobjects.move")
+			vim.keymap.set({ "x", "o" }, "af", function() select.select_textobject("@function.outer", "textobjects") end, { desc = "Around function" })
+			vim.keymap.set({ "x", "o" }, "if", function() select.select_textobject("@function.inner", "textobjects") end, { desc = "Inside function" })
+			vim.keymap.set({ "x", "o" }, "ac", function() select.select_textobject("@class.outer", "textobjects") end, { desc = "Around class" })
+			vim.keymap.set({ "x", "o" }, "ic", function() select.select_textobject("@class.inner", "textobjects") end, { desc = "Inside class" })
+			vim.keymap.set({ "n", "x", "o" }, "]m", function() move.goto_next_start("@function.outer", "textobjects") end, { desc = "Next function start" })
+			vim.keymap.set({ "n", "x", "o" }, "[m", function() move.goto_previous_start("@function.outer", "textobjects") end, { desc = "Previous function start" })
 		end,
 	},
 
@@ -100,37 +126,6 @@ return {
 		opts = {},
 	},
 
-	{
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
-						keymaps = {
-							["af"] = { query = "@function.outer", desc = "Around function" },
-							["if"] = { query = "@function.inner", desc = "Inside function" },
-							["ac"] = { query = "@class.outer", desc = "Around class" },
-							["ic"] = { query = "@class.inner", desc = "Inside class" },
-						},
-					},
-					move = {
-						enable = true,
-						set_jumps = true,
-						goto_next_start = {
-							["]m"] = { query = "@function.outer", desc = "Next function start" },
-						},
-						goto_prev_start = {
-							["[m"] = { query = "@function.outer", desc = "Previous function start" },
-						},
-					},
-				},
-			})
-		end,
-	},
 
 	{
 		"folke/todo-comments.nvim",
