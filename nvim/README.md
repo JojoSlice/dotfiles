@@ -1,103 +1,59 @@
-# Neovim Configuration
+# Neovim
 
-A modern, modular Neovim setup with LSP, completion, fuzzy finding, and debugging out of the box.
-
-## Prerequisites
-
-- [Neovim](https://neovim.io/) 0.9+ (0.10+ recommended)
-- [Git](https://git-scm.com/)
-- [ripgrep](https://github.com/BurntSushi/ripgrep) (for live grep search)
-- A [Nerd Font](https://www.nerdfonts.com/) (for icons)
+Modulär Neovim-konfiguration i Lua med LSP, completion, fuzzy finding och debugging.
 
 ## Installation
 
-```bash
-# 1. Backup existing config (if any)
-mv ~/.config/nvim ~/.config/nvim.backup
+Kör `install.sh` från repots rot — den skapar symlinken `~/.config/nvim → dotfiles/nvim`.
 
-# 2. Clone this config
-git clone <your-repo-url> ~/.config/nvim
+Vid första start av Neovim installeras alla plugins automatiskt via Lazy, och alla LSP-servrar, formatters och debuggers via Mason.
 
-# 3. Start Neovim (plugins install automatically)
-nvim
-```
+**Krav:** Neovim 0.10+, en [Nerd Font](https://www.nerdfonts.com/) i terminalen.
 
-## Getting Started
+## Språkstöd
 
-Leader key is `Space`. Press it and wait to see all available keybindings via which-key.
+| Språk | LSP | Formatter | Debugger |
+|-------|-----|-----------|----------|
+| TypeScript/JavaScript | ts_ls, eslint | prettier | js-debug-adapter |
+| Rust | rust-analyzer | rustfmt | codelldb |
+| Go | gopls | goimports | delve |
+| Python | pyright | ruff | debugpy |
+| C# | roslyn | csharpier | netcoredbg |
+| Dart/Flutter | dart | dart_format | — |
+| Gleam | gleam | gleam_format | — |
+| Svelte | svelte | prettier | — |
+| Lua | lua_ls | stylua | — |
+| HTML/CSS/JSON/YAML | html, cssls, jsonls, yamlls | prettier | — |
 
-### Essential Keybindings
+## Viktigaste keybindings
 
-| Key | Action |
-|-----|--------|
-| `Space` | Leader key (wait to see all options) |
-| `Space ff` | Find files |
-| `Space fg` | Search in files (grep) |
-| `Space pv` | File explorer (Oil) |
-| `gd` | Go to definition |
-| `gr` | Go to references |
-| `K` | Hover documentation |
-| `Space ca` | Code actions |
-| `Space cr` | Rename symbol |
-| `gc` | Toggle comment |
-| `Space h` | Harpoon menu (quick file switching) |
+Leader-knappen är `Space`. Tryck och vänta för att se alla tillgängliga kommandon via which-key.
 
-### Useful Commands
-
-| Command | Action |
+| Tangent | Aktion |
 |---------|--------|
-| `:Mason` | Manage LSP servers and tools |
-| `:Lazy` | Manage plugins |
-| `:checkhealth` | Diagnose issues |
+| `Space ff` | Hitta filer |
+| `Space fg` | Sök i filer (grep) |
+| `Space pv` | Filutforskaren (Oil) |
+| `Space h` | Harpoon-menyn |
+| `Space H` | Lägg till fil i Harpoon |
+| `Space 1–5` | Hoppa till Harpoon-fil |
+| `gd` | Gå till definition |
+| `gr` | Gå till referenser |
+| `K` | Hover-dokumentation |
+| `Space ca` | Kodåtgärder |
+| `Space cr` | Byt namn på symbol |
+| `gc` | Kommentera/avkommentera |
 
-## Features
+## Kommandon
 
-- **LSP** - Language server support with auto-completion (TypeScript, Lua, Rust, C#, HTML, CSS, JSON, Svelte, YAML, Gleam)
-- **Completion** - nvim-cmp with LSP, snippets, and path completion
-- **Fuzzy Finder** - Telescope for files, grep, buffers, and help
-- **File Explorer** - Oil.nvim (edit directories like buffers)
-- **Git** - Fugitive and Gitsigns for git integration
-- **Debugging** - DAP support with UI for multiple languages
-- **Formatting** - Auto-format on save via Conform
+| Kommando | Aktion |
+|----------|--------|
+| `:Mason` | Hantera LSP-servrar och verktyg |
+| `:Lazy` | Hantera plugins |
+| `:checkhealth` | Diagnostik |
 
-## Customization
+## Felsökning
 
-Your customizations live in `lua/user/` and are gitignored, so you can pull updates without conflicts.
-
-```bash
-cd ~/.config/nvim/lua/user
-
-# Add custom keymaps
-cp keymaps.lua.example keymaps.lua
-
-# Override options
-cp options.lua.example options.lua
-
-# Add plugins
-cp plugins.lua.example plugins.lua
-```
-
-## Troubleshooting
-
-**Plugins not loading?**
-Run `:Lazy sync` to install/update all plugins.
-
-**LSP not working?**
-Run `:Mason` to install language servers, then `:LspInfo` to check status.
-
-**Icons look broken?**
-Install a [Nerd Font](https://www.nerdfonts.com/) and configure your terminal to use it.
-
-**General issues?**
-Run `:checkhealth` for a full diagnostic report.
-
-## Tips
-
-- Press `Space` and wait to discover keybindings with which-key
-- Use `Space 1` through `Space 5` to jump to Harpoon-marked files
-- `Space H` adds current file to Harpoon
-- Telescope searches respect `.gitignore` by default
-
-## License
-
-MIT
+- **Plugins installeras inte** — kör `:Lazy sync`
+- **LSP fungerar inte** — kör `:Mason` och kontrollera med `:LspInfo`
+- **Brutna ikoner** — installera en Nerd Font och konfigurera terminalen att använda den
