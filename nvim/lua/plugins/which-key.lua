@@ -15,7 +15,6 @@ return {
 			{ "<leader>d", group = "Debug (DAP)" },
 			{ "<leader>ds", group = "Debug Step" },
 			{ "<leader>g", group = "Git" },
-			{ "<leader>r", group = "Rust" },
 			{ "<leader>k", group = "Kulala (HTTP)" },
 			{ "<leader>s", group = "Search/Replace (Spectre)" },
 			{ "<leader>c", group = "Code" },

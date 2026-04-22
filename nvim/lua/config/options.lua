@@ -1,4 +1,4 @@
--- Add Linuxbrew to PATH if it exists (for LSP servers like gleam)
+-- Add Linuxbrew to PATH if it exists (for LSP servers)
 local linuxbrew_bin = "/home/linuxbrew/.linuxbrew/bin"
 if vim.fn.isdirectory(linuxbrew_bin) == 1 then
 	vim.env.PATH = linuxbrew_bin .. ":" .. vim.env.PATH

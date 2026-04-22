@@ -44,7 +44,7 @@ return {
 			})
 			require("nvim-treesitter").install({
 				"lua", "javascript", "typescript", "html", "css", "c_sharp", "json",
-				"rust", "toml", "svelte", "gleam", "python", "dart", "yaml",
+				"toml", "python", "dart", "yaml",
 				"markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex",
 				"go", "gomod", "gosum", "gowork", "query",
 			})
