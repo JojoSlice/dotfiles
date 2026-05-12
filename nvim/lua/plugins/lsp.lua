@@ -96,7 +96,7 @@ return {
 		opts = {
 			ensure_installed = {
 				"stylua",
-				"prettier",
+				"prettierd",
 				"csharpier",
 				"vtsls",
 				"tailwindcss-language-server",
@@ -131,15 +131,15 @@ return {
 		opts = {
 			formatters_by_ft = {
 				lua = { "stylua" },
-				javascript = { "prettier" },
-				javascriptreact = { "prettier" },
-				typescript = { "prettier" },
-				typescriptreact = { "prettier" },
-				html = { "prettier" },
-				css = { "prettier" },
-				json = { "prettier" },
+				javascript = { "prettierd" },
+				javascriptreact = { "prettierd" },
+				typescript = { "prettierd" },
+				typescriptreact = { "prettierd" },
+				html = { "prettierd" },
+				css = { "prettierd" },
+				json = { "prettierd" },
 				cs = { "csharpier" },
-				yaml = { "prettier" },
+				yaml = { "prettierd" },
 				dart = { "dart_format" },
 				python = { "ruff_format", "ruff_organize_imports" },
 			go = { "goimports" },
