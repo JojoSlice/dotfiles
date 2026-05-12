@@ -4,10 +4,27 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-			local simple_servers = { "ts_ls", "html", "cssls", "jsonls", "eslint", "gopls" }
+			local simple_servers = { "html", "cssls", "jsonls", "eslint", "gopls", "tailwindcss" }
 			for _, server in ipairs(simple_servers) do
 				vim.lsp.config(server, { capabilities = capabilities })
 			end
+
+			vim.lsp.config("vtsls", {
+				capabilities = capabilities,
+				settings = {
+					typescript = { format = { enable = false } },
+					javascript = { format = { enable = false } },
+					vtsls = { autoUseWorkspaceTsdk = true },
+				},
+			})
+
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = vim.api.nvim_create_augroup("eslint-fix-all", { clear = true }),
+				pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+				callback = function()
+					pcall(vim.cmd, "EslintFixAll")
+				end,
+			})
 
 			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
@@ -56,7 +73,7 @@ return {
 				},
 			})
 
-			local all_servers = { "ts_ls", "lua_ls", "html", "cssls", "jsonls", "eslint", "yamlls", "pyright", "gopls" }
+			local all_servers = { "vtsls", "lua_ls", "html", "cssls", "jsonls", "eslint", "yamlls", "pyright", "gopls", "tailwindcss" }
 			for _, server in ipairs(all_servers) do
 				vim.lsp.enable(server)
 			end
@@ -81,7 +98,8 @@ return {
 				"stylua",
 				"prettier",
 				"csharpier",
-				"typescript-language-server",
+				"vtsls",
+				"tailwindcss-language-server",
 				"lua-language-server",
 				"html-lsp",
 				"css-lsp",
@@ -114,7 +132,9 @@ return {
 			formatters_by_ft = {
 				lua = { "stylua" },
 				javascript = { "prettier" },
+				javascriptreact = { "prettier" },
 				typescript = { "prettier" },
+				typescriptreact = { "prettier" },
 				html = { "prettier" },
 				css = { "prettier" },
 				json = { "prettier" },

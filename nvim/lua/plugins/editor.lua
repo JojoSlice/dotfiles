@@ -43,7 +43,7 @@ return {
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
 			require("nvim-treesitter").install({
-				"lua", "javascript", "typescript", "html", "css", "c_sharp", "json",
+				"lua", "javascript", "typescript", "tsx", "html", "css", "c_sharp", "json",
 				"toml", "python", "dart", "yaml",
 				"markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex",
 				"go", "gomod", "gosum", "gowork", "query",
@@ -83,6 +83,18 @@ return {
 		"windwp/nvim-ts-autotag",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {},
+	},
+
+	{
+		"luckasRanarison/tailwind-tools.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		opts = {
+			document_color = {
+				enabled = true,
+				kind = "inline",
+				debounce = 200,
+			},
+		},
 	},
 
 	{
