@@ -1,10 +1,11 @@
 return {
 	{
-		"rose-pine/neovim",
-		name = "rose-pine",
+		"craftzdog/solarized-osaka.nvim",
+		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.cmd("colorscheme rose-pine")
+			require("solarized-osaka").setup({})
+			vim.cmd("colorscheme solarized-osaka")
 		end,
 	},
 }
