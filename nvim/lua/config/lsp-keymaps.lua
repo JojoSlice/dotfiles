@@ -18,8 +18,8 @@ function M.setup(bufnr)
 	end, { desc = "Format code" })
 	buf_map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
 
-	buf_map("n", "]d", function() vim.diagnostic.goto_next() end, { desc = "Next diagnostic" })
-	buf_map("n", "[d", function() vim.diagnostic.goto_prev() end, { desc = "Previous diagnostic" })
+	buf_map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Next diagnostic" })
+	buf_map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Previous diagnostic" })
 	buf_map("n", "<leader>cd", function() vim.diagnostic.open_float() end, { desc = "Show diagnostic" })
 end
 
