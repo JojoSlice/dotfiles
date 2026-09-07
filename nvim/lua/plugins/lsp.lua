@@ -1,16 +1,13 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
+		dependencies = { "saghen/blink.cmp" },
 		config = function()
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-			local simple_servers = { "html", "cssls", "jsonls", "eslint", "gopls", "tailwindcss" }
-			for _, server in ipairs(simple_servers) do
-				vim.lsp.config(server, { capabilities = capabilities })
-			end
+			vim.lsp.config("*", {
+				capabilities = require("blink.cmp").get_lsp_capabilities(),
+			})
 
 			vim.lsp.config("vtsls", {
-				capabilities = capabilities,
 				settings = {
 					typescript = { format = { enable = false } },
 					javascript = { format = { enable = false } },
@@ -27,7 +24,6 @@ return {
 			})
 
 			vim.lsp.config("lua_ls", {
-				capabilities = capabilities,
 				settings = {
 					Lua = {
 						runtime = { version = "LuaJIT" },
@@ -41,7 +37,6 @@ return {
 				},
 			})
 			vim.lsp.config("yamlls", {
-				capabilities = capabilities,
 				settings = {
 					yaml = {
 						schemaStore = {
@@ -60,7 +55,6 @@ return {
 				},
 			})
 			vim.lsp.config("pyright", {
-				capabilities = capabilities,
 				settings = {
 					python = {
 						analysis = {
@@ -73,10 +67,10 @@ return {
 				},
 			})
 
-			local all_servers = { "vtsls", "lua_ls", "html", "cssls", "jsonls", "eslint", "yamlls", "pyright", "gopls", "tailwindcss" }
-			for _, server in ipairs(all_servers) do
-				vim.lsp.enable(server)
-			end
+			vim.lsp.enable({
+				"vtsls", "lua_ls", "html", "cssls", "jsonls", "eslint",
+				"yamlls", "pyright", "gopls", "tailwindcss", "angularls",
+			})
 		end,
 	},
 
@@ -112,6 +106,7 @@ return {
 				"ruff",
 				"gopls",
 				"goimports",
+				"angular-language-server",
 			},
 		},
 	},
@@ -119,9 +114,10 @@ return {
 	{
 		"seblyng/roslyn.nvim",
 		ft = "cs",
+		dependencies = { "saghen/blink.cmp" },
 		opts = function()
 			return {
-				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+				capabilities = require("blink.cmp").get_lsp_capabilities(),
 			}
 		end,
 	},
@@ -143,6 +139,7 @@ return {
 				dart = { "dart_format" },
 				python = { "ruff_format", "ruff_organize_imports" },
 			go = { "goimports" },
+			htmlangular = { "prettierd" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,

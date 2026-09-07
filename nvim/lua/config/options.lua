@@ -20,7 +20,6 @@ vim.o.hlsearch = true
 vim.o.clipboard = "unnamedplus"
 vim.o.signcolumn = "yes"
 vim.o.updatetime = 300
-vim.o.termguicolors = true
 vim.o.wrap = true
 vim.o.linebreak = true
 vim.o.breakindent = true
@@ -34,6 +33,6 @@ vim.diagnostic.config({
 	severity_sort = true,
 	float = {
 		border = "rounded",
-		source = "always",
+		source = true,
 	},
 })

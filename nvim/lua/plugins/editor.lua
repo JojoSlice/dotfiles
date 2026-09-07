@@ -46,17 +46,8 @@ return {
 				"lua", "javascript", "typescript", "tsx", "html", "css", "c_sharp", "json",
 				"toml", "python", "dart", "yaml",
 				"markdown", "markdown_inline", "bash", "vim", "vimdoc", "regex",
-				"go", "gomod", "gosum", "gowork", "query",
+				"go", "gomod", "gosum", "gowork", "angular", "query",
 			})
-			vim.api.nvim_create_autocmd("FileType", {
-				callback = function()
-					pcall(vim.treesitter.start)
-				end,
-			})
-			-- Start treesitter for current buffer (FileType may have already fired)
-			vim.schedule(function()
-				pcall(vim.treesitter.start)
-			end)
 		end,
 	},
 
@@ -203,47 +194,27 @@ return {
 	},
 
 	{
-		"nvim-pack/nvim-spectre",
-		build = false,
-		cmd = "Spectre",
-		opts = {
-			replace_engine = {
-				["sed"] = {
-					cmd = "sed",
-					args = nil,
-				},
-			},
-			default = {
-				find = {
-					cmd = "rg",
-					options = { "ignore-case" },
-				},
-				replace = {
-					cmd = "sed",
-				},
-			},
-			is_insert_mode = false,
-			open_cmd = "noswapfile vnew",
-		},
+		"MagicDuck/grug-far.nvim",
+		opts = {},
 		keys = {
 			{
 				"<leader>S",
 				function()
-					require("spectre").toggle()
+					require("grug-far").toggle_instance({ instanceName = "far" })
 				end,
-				desc = "Toggle Spectre",
+				desc = "Toggle Find and Replace",
 			},
 			{
 				"<leader>sw",
 				function()
-					require("spectre").open_visual({ select_word = true })
+					require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
 				end,
 				desc = "Search current word",
 			},
 			{
 				"<leader>sw",
 				function()
-					require("spectre").open_visual()
+					require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
 				end,
 				mode = "v",
 				desc = "Search selection",
@@ -251,7 +222,7 @@ return {
 			{
 				"<leader>sf",
 				function()
-					require("spectre").open_file_search({ select_word = true })
+					require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } })
 				end,
 				desc = "Search in current file",
 			},

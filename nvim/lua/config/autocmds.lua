@@ -2,7 +2,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking text",
 	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
 	callback = function()
-		vim.highlight.on_yank()
+		vim.hl.on_yank()
 	end,
 })
 
@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("close-with-q", { clear = true }),
-	pattern = { "help", "qf", "spectre_panel", "notify", "lspinfo", "man", "checkhealth" },
+	pattern = { "help", "qf", "grug-far", "notify", "lspinfo", "man", "checkhealth" },
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false
 		vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = event.buf, silent = true, desc = "Close window" })
