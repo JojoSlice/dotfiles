@@ -134,6 +134,48 @@ return {
 		opts = {},
 	},
 
+	{
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		opts = {
+			modes = {
+				char = { enabled = true },
+				search = { enabled = false },
+			},
+		},
+		keys = {
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+		},
+	},
+
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = "Trouble",
+		opts = {},
+		keys = {
+			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer diagnostics (Trouble)" },
+			{ "<leader>xt", "<cmd>Trouble todo toggle<cr>", desc = "TODOs (Trouble)" },
+			{ "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location list (Trouble)" },
+			{ "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list (Trouble)" },
+		},
+	},
+
+	{
+		"sindrets/diffview.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+		opts = {},
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view open" },
+			{ "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Diff view close" },
+			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history (current)" },
+			{ "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "File history (repo)" },
+		},
+	},
 
 	{
 		"folke/todo-comments.nvim",

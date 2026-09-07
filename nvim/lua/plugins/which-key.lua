@@ -20,6 +20,7 @@ return {
 			{ "<leader>c", group = "Code" },
 			{ "<leader>p", group = "Oil (File explorer)" },
 			{ "<leader>b", group = "Buffer" },
+			{ "<leader>x", group = "Trouble (Diagnostics)" },
 			{ "<leader>F", group = "Flutter" },
 			{ "<leader>1", hidden = true },
 			{ "<leader>2", hidden = true },
@@ -180,10 +181,10 @@ return {
 			{ "`a", desc = "Jump to mark a (exact)" },
 
 			-- Search
-			{ "f", group = "Find character forward" },
-			{ "F", group = "Find character backward" },
-			{ "t", group = "Till character forward" },
-			{ "T", group = "Till character backward" },
+			{ "f", group = "Find char forward (Flash)" },
+			{ "F", group = "Find char backward (Flash)" },
+			{ "t", group = "Till char forward (Flash)" },
+			{ "T", group = "Till char backward (Flash)" },
 			{ ";", desc = "Repeat last f/F/t/T" },
 			{ ",", desc = "Repeat last f/F/t/T backwards" },
 		})

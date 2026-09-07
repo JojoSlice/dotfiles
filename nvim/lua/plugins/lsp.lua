@@ -27,11 +27,6 @@ return {
 				settings = {
 					Lua = {
 						runtime = { version = "LuaJIT" },
-						diagnostics = { globals = { "vim" } },
-						workspace = {
-							library = { vim.env.VIMRUNTIME },
-							checkThirdParty = false,
-						},
 						telemetry = { enable = false },
 					},
 				},
@@ -72,6 +67,16 @@ return {
 				"yamlls", "pyright", "gopls", "tailwindcss", "angularls",
 			})
 		end,
+	},
+
+	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
 	},
 
 	{
