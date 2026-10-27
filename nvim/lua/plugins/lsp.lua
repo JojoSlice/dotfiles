@@ -143,8 +143,8 @@ return {
 				yaml = { "prettierd" },
 				dart = { "dart_format" },
 				python = { "ruff_format", "ruff_organize_imports" },
-			go = { "goimports" },
-			htmlangular = { "prettierd" },
+				go = { "goimports" },
+				htmlangular = { "prettierd" },
 			},
 			format_on_save = {
 				timeout_ms = 1500,
